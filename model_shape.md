@@ -24,11 +24,11 @@ t(TId).
 
 - wagi zadan
 
-zadanie | waga
+zadanie i | waga
 
 p(TId,N).
 
-- zadania na orbitach - czy nalezy wykonac na orbicie j
+- zadanie na orbitach - (czy nalezy wykonac na orbicie j)
 
 zadanie i | orbita j | 1 - TAK : 0 - NIE
 
@@ -36,45 +36,51 @@ x(TId,OId,Do).
 
 - kolejnosc wykonywania zadan
 
-zadanie i | zadanie k | 1 - TAK (i poprzedza j) : 0 - NIE (nie sa w kolejnosci)
+zadanie i | zadanie j | 1 - TAK (i poprzedza j) : 0 - NIE (nie sa w kolejnosci)
 
 y(TId,TId,After).
 
 - okna czasowe
 
-Okno zadania | zadanie i | start zadania | koniec zadania
+Zadania:
+
+zadanie i | start okna | koniec okna
 
 tw(TId,Start,End).
 
-Okno st. kontr. | start okna dla stacji kontrolnej | koniec okna
+Stacji kontrolnej
+
+stacja kontrolna i | start okna | koniec okna
 
 cw(CId,Start,End).
 
-Okno st. naziemn. | start okna dla stacji naziemnej | koniec okna
+Stacji naziemnej
+
+stacja naziemna i | start okna | koniec okna
 
 gw(GId,Start,End).
 
-- pamiec satelity na orbicie
+- pamięć satelity na orbicie
 
-orbita | pamiec
+orbita i | pamiec
 
 w(OId,Memory).
 
-- zuzycie pamieci satelity na orbicie
+- zużycie pamięci satelity na orbicie
 
-orbita | zuzycie per zadanie
+orbita i | zużycie (w jednostce zadań)
 
 w_use(OId,WUse).
 
 - energia satelity na orbicie
 
-orbita | energia
+orbita i | energia
 
 e(Oid,Energy).
 
-- zuzycie energii satelity na orbicie (w jednostce zadania)
+- zużycie energii satelity na orbicie
 
-orbita | zuzycie per zadanie
+orbita i | zużycie (w jednostce zadań)
 
 e_use(Oid,EUse).
 
