@@ -16,29 +16,29 @@ Założenia:
 Model:
 - orbita z satelitą
 
-o(OId).
+orbit(OId).
 
 - zadania do wykonania
 
-t(TId).
+task(TId).
 
 - wagi zadan
 
 zadanie i | waga
 
-p(TId,N).
+priority(TId,N).
 
 - zadanie na orbitach - (czy nalezy wykonac na orbicie j)
 
 zadanie i | orbita j | 1 - TAK : 0 - NIE
 
-x(TId,OId,Do).
+task_orbit(TId,OId,Do).
 
 - kolejnosc wykonywania zadan
 
 zadanie i | zadanie j | 1 - TAK (i poprzedza j) : 0 - NIE (nie sa w kolejnosci)
 
-y(TId,TId,After).
+task_order(TId,TId,After).
 
 - okna czasowe
 
@@ -46,42 +46,46 @@ Zadania:
 
 zadanie i | start okna | koniec okna
 
-tw(TId,Start,End).
+task_window(TId,Start,End).
 
 Stacji kontrolnej
 
 stacja kontrolna i | start okna | koniec okna
 
-cw(CId,Start,End).
+control_window(CId,Start,End).
 
 Stacji naziemnej
 
 stacja naziemna i | start okna | koniec okna
 
-gw(GId,Start,End).
+ground_window(GId,Start,End).
 
 - pamięć satelity na orbicie
 
 orbita i | pamiec
 
-w(OId,Memory).
+memory_storage(OId,Memory).
 
 - zużycie pamięci satelity na orbicie
 
 orbita i | zużycie (w jednostce zadań)
 
-w_use(OId,WUse).
+memory_use(OId,WUse).
 
 - energia satelity na orbicie
 
 orbita i | energia
 
-e(Oid,Energy).
+energy_storage(Oid,Energy).
 
 - zużycie energii satelity na orbicie
 
 orbita i | zużycie (w jednostce zadań)
 
-e_use(Oid,EUse).
+energy_use(Oid,EUse).
 
+- generowanie energii satelity na orbicie
 
+orbita i | wartość generowana (na minutę)
+
+energy_gen(Oid,EGen)
