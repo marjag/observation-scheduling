@@ -44,7 +44,7 @@ rules = []
 
 # memory storage 
 for x in range(1, mains.get('orbits')+1):
-	rules.append('memory_storage('+str(x)+","+str(randrange(100, 200))+")")
+	rules.append('memory_storage('+str(x)+","+str(tools.rand_hundred())+")")
 
 problem_instance['memory_storage'] = rules
 rules = []
@@ -52,14 +52,14 @@ rules = []
 
 # memory use
 for x in range(1, mains.get('orbits')+1):
-	rules.append('memory_use('+str(x)+","+str(randrange(10, 50))+")")
+	rules.append('memory_use('+str(x)+","+str(tools.rand_decimal())+")")
 
 problem_instance['memory_use'] = rules
 rules = []
 
 # energy storage 
 for x in range(1, mains.get('orbits')+1):
-	rules.append('energy_storage('+str(x)+","+str(randrange(200, 300))+")")
+	rules.append('energy_storage('+str(x)+","+str(tools.rand_hundred())+")")
 
 problem_instance['energy_storage'] = rules
 rules = []
@@ -73,7 +73,7 @@ rules = []
 
 # energy gen
 for x in range(1, mains.get('orbits')+1):
-	rules.append('energy_gen('+str(x)+","+str(randrange(1, 2))+")")
+	rules.append('energy_gen('+str(x)+","+str(randrange(1, 3))+")")
 
 problem_instance['energy_gen'] = rules
 rules = []
@@ -127,7 +127,7 @@ for y in range(1,1 + mains.get('control_stations') + mains.get('ground_stations'
 			station_type = 'control'
 
 	cnt[station_type] = cnt.get(station_type) - 1
-	time_i = time + randrange(10,40)
+	time_i = time + tools.rand_hundred()
 	time_j = time_i + tools.window_time()
 	time = time_j
 	rules.append(station_type+'_window('+str(orbit)+","+str(cnt.get(station_type)+1)+","+str(time_i)+","+str(time_j)+")")

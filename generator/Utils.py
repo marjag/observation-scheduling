@@ -14,13 +14,13 @@ class Utils:
 		return randrange(1,9) * 10
 
 	def rand_hundred(self):
-		return rand_decimal() * 10
+		return self.rand_decimal() * 10
 
 	def rand_thousand(self):	
-		return rand_decimal() * 100
+		return self.rand_decimal() * 100
 
 	def rand_divisible_10(self):
-		return rand_decimal() * randrange(1, 99)
+		return self.rand_decimal() * randrange(1, 99)
 
 	def rand_divisible_50(self):
 		return randrange(1,9) * 50 * randrange(1, 99)
