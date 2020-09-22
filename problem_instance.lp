@@ -4,7 +4,7 @@
 orbit(1;2).
 
 % observation tasks
-task(1..4).
+task(1..5).
 
 % control stations
 control_st(1..3).
@@ -17,9 +17,10 @@ task_orbit(1,1,1;1,2,0).
 task_orbit(2,1,0;2,2,1).
 task_orbit(3,1,0;3,2,1).
 task_orbit(4,1,1;4,2,0).
+task_orbit(4,1,1;4,2,1).
 
 % task priorities
-priority(1,2). priority(2,1). priority(3,2). priority(4,3).
+priority(1,2). priority(2,1). priority(3,2). priority(4,3). priority(5,1).
 
 % observe task i before task j (decision variable)
 task_order(1,1,0). task_order(1,2,1). task_order(1,3,0). task_order(1,4,0). 
@@ -28,7 +29,7 @@ task_order(3,1,0). task_order(3,2,0). task_order(3,3,0). task_order(3,4,1).
 task_order(4,1,0). task_order(4,2,0). task_order(4,3,0). task_order(4,4,0). 
 
 % task time window - observe task i within minutes j to k
-task_window(1,3,4). task_window(2,5,6). task_window(3,7,8). task_window(4,23,24).
+task_window(1,3,4). task_window(2,5,6). task_window(3,7,8). task_window(4,23,24). task_window(5,25,26).
 
 % control station time window - communicate with control station i within minutes j to k
 control_window(1,1,2). control_window(2,40,44). control_window(3,50,52).
