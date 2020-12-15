@@ -1,5 +1,5 @@
 % Problem encoding
-%%GENERATE
+%% GENERATE
 
 % przypisac satelite do wykonywanej akcji, dla kazdej akcji
 % obserowanie - moze, ale nie musi byc wykonane, jezeli jest, to tylko 1 satelita
@@ -9,7 +9,7 @@
 % uplink - zawsze musi byc wykonane przez wszystkie satelity
 1 { execute(Action,Sat) : satellite(Sat) } 1 :- satellite(Sat), action(Action,uplink).
 %*
-execute(1,landsat). execute(2,landsat). execute(3,sentinel). execute(4,landsat).
+% execute(1,landsat). execute(2,landsat). execute(3,sentinel). execute(4,landsat).
 *%
 
 % wybrac z mozliwych czas wykonywania zadan dla okna kazdej akcji, dla kazdego satelity
@@ -29,8 +29,6 @@ End <= WEnd
 :- time(Time), satellite(Sat), #count { Action : execute(Action,Sat), sat_action_window(Action,Sat,Start,End), Time>=Start, Time<=End} > 1.
 
 % parametry satelity
-% zamarkowanie pierwszego downlinku w akcjach satelity
-%first_downlink(Sat,Action) :- execute(Downlink,Sat), action(Downlink,downlink), Action = #min {A: execute(A,S), action(A,downlink), S=Sat}.
 % zuzycie pamieci satelit w danym czasie
 % downlink zwalnia zuzyta pamiec
 sat_memory(Sat,Action,0) :- execute(Action,Sat), action(Action,downlink).
@@ -46,30 +44,37 @@ Cost = #sum { U,A : execute(A,S), A <= Action, energy_use(S,U), S=Sat },
 Gen = Units * Start,
 Amount = Initial+Gen-Cost.
 
-% jakosc harmonogramowania zadan (suma priorytetow przipisanych zadan)
-quality(X) :- X = #sum { Priority,Action : priority(Action,Priority), execute(Action,Sat) }.
+observed(Sat,Cnt) :- satellite(Sat), Cnt = #count {A: execute(A,S), action(A,observe), S=Sat }.
+downlinked(Sat,Cnt) :- satellite(Sat), Cnt = #count {A: execute(A,S), action(A,downlink), S=Sat }.
+executed(Sat,Cnt) :- satellite(Sat), Cnt = #count {A: execute(A,S), S=Sat }.
 
-%%TEST
+
+%% TEST
 % wykluczyc modele z przekroczeniem pamieci
 :- sat_memory(Sat,Action,Val), memory_storage(Sat,Max),Val > Max.
 
 % wykluczyc modele z wyczerpaniem energii
 :- sat_energy(Sat,Action,Val), Val < 1.
 
+% wykluczyc modele, w ktorych nie wykonano zadan awaryjnych
+:- not execute(Action,_), emergency_task(Action).
 
+
+%% OPTIMISE
+% jakosc harmonogramowania zadan (suma priorytetow przipisanych zadan)
+quality(X) :- X = #sum { Priority,Action : priority(Action,Priority), execute(Action,Sat) }.
+
+% maksymalizuj jakosc harmonogramowania
 #maximize { X@4 : quality(X) }.
-%#minimize { X@3 : sat_memory(Sat,Action,Val) }.
-%#minimize { X@2 : sat_energy(Sat,Action,Val) }.
+% minimalizuj ilosc akcji wykonanych
+#minimize { X@1 : executed(Sat,X) }.
 
-observed(Sat,Cnt) :- satellite(Sat), Cnt = #count {A: execute(A,S), action(A,observe), S=Sat }.
-downlinked(Sat,Cnt) :- satellite(Sat), Cnt = #count {A: execute(A,S), action(A,downlink), S=Sat }.
-
+#show emergency_task/1.
 #show execute/2.
-#show observed/2. #show downlinked/2.
-%#show sat_action_window/4.
-%#show sat_memory/3.
-%#show sat_energy/3.
-%#show energy/3.
-%#show action_window/3.
-%#show sat_memory/3.
-%#show quality/1.
+#show executed/2.
+#show observed/2.
+#show downlinked/2.
+#show sat_action_window/4.
+#show sat_memory/3.
+#show sat_energy/3.
+#show quality/1.

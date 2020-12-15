@@ -23,6 +23,9 @@ action(9,uplink).
 %*
 *%
 
+% zadania awaryjne
+emergency_task(1).
+
 % control stations
 control_st(1..2).
 
@@ -36,12 +39,12 @@ priority(1,2). priority(3,2). priority(4,1). priority(7,3). priority(8,1).
 % satellite can take action i between minutes k to i
 action_window(1,1,4).
 action_window(2,5,7).
-action_window(3,7,11).
-action_window(4,7,11).
-action_window(5,9,12).
+action_window(3,7,10).
+action_window(4,8,10).
+action_window(5,11,14).
 action_window(6,20,23).
-action_window(7,23,26).
-action_window(8,25,27).
+action_window(7,32,35).
+action_window(8,32,34).
 action_window(9,35,38).
 %*
 *%
