@@ -8,9 +8,6 @@
 { execute(Action,Sat) : satellite(Sat) } :- action(Action,downlink).
 % uplink - zawsze musi byc wykonane przez wszystkie satelity
 1 { execute(Action,Sat) : satellite(Sat) } 1 :- satellite(Sat), action(Action,uplink).
-%*
-% execute(1,landsat). execute(2,landsat). execute(3,sentinel). execute(4,landsat).
-*%
 
 % wybrac z mozliwych czas wykonywania zadan dla okna kazdej akcji, dla kazdego satelity
 % czas wykonywania akcji musi miescic sie w dostepnych oknach czasowych
@@ -44,9 +41,10 @@ Cost = #sum { U,A : execute(A,S), A <= Action, energy_use(S,U), S=Sat },
 Gen = Units * Start,
 Amount = Initial+Gen-Cost.
 
+% statystyki dot. ilosci akcji wykonywanych przez satelity
+executed(Sat,Cnt) :- satellite(Sat), Cnt = #count {A: execute(A,S), S=Sat }.
 observed(Sat,Cnt) :- satellite(Sat), Cnt = #count {A: execute(A,S), action(A,observe), S=Sat }.
 downlinked(Sat,Cnt) :- satellite(Sat), Cnt = #count {A: execute(A,S), action(A,downlink), S=Sat }.
-executed(Sat,Cnt) :- satellite(Sat), Cnt = #count {A: execute(A,S), S=Sat }.
 
 
 %% TEST

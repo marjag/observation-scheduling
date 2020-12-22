@@ -1,0 +1,6 @@
+{
+	"clingo_exec": "/bin/clingo-4.5.4-linux-x86_64/clingo",
+	"problem_encoding": "/scheduler.lp",
+	"problem_instances_dir": "/problem_instances/",
+	"report_file": "out.lp"
+}

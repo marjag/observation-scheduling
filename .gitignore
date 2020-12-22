@@ -1,1 +1,4 @@
 problem_instance*
+.*
+__init__.py
+*.pyc
