@@ -11,35 +11,29 @@
 
 % wybrac z mozliwych czas wykonywania zadan dla okna kazdej akcji, dla kazdego satelity
 % czas wykonywania akcji musi miescic sie w dostepnych oknach czasowych
-1 { sat_action_window(Action,Sat,Start,End) : action_window(Action,WStart,WEnd),
-satellite(Sat),
-action(Action,Type),
-sat_action_time(Sat,Type,Duration),
+1 { action_scheduled(Action,Sat,Start,End) : action_window(Action,WStart,WEnd),
 time(Start),
-Start >= WStart,
 End = Start+Duration-1,
+Start >= WStart,
 End <= WEnd
- } 1 :- execute(Action,Sat).
-
-
-% akcje nie moga sie na siebie nakladac
-:- time(Time), satellite(Sat), #count { Action : execute(Action,Sat), sat_action_window(Action,Sat,Start,End), Time>=Start, Time<=End} > 1.
+ } 1 :- execute(Action,Sat), satellite(Sat), action(Action,Type), sat_action_time(Sat,Type,Duration), action_type(Type).
 
 % parametry satelity
 % zuzycie pamieci satelit w danym czasie
 % downlink zwalnia zuzyta pamiec
-sat_memory(Sat,Action,0) :- execute(Action,Sat), action(Action,downlink).
+sat_memory(Sat,Action,0) :- execute(Action,Sat), action(Action,downlink), satellite(Sat).
 % obserwacje zajmuja pamiec
-sat_memory(Sat,Action,Use) :- execute(Action,Sat), action(Action,observe),
+sat_memory(Sat,Action,Use) :- execute(Action,Sat), action(Action,observe), satellite(Sat),
 LastDownlink = #max {A: execute(A,S), action(A,downlink), S=Sat, A < Action },
 Use = #sum {Units,A,D,S: execute(A,S), action(A,observe), memory_use(S,Units), A <= Action, A > D, S=Sat, D=LastDownlink }.
 
 % zuzycie energii
-sat_energy(Sat,Action,Amount) :- execute(Action,Sat),
-sat_energy(Sat,0,Initial), energy_gen(Sat,Units), sat_action_window(Action,Sat,Start,End),
+sat_energy(Sat,Action,Amount) :- execute(Action,Sat), satellite(Sat),
+sat_energy(Sat,0,Initial), energy_gen(Sat,Units), action_scheduled(Action,Sat,Start,End),
 Cost = #sum { U,A : execute(A,S), A <= Action, energy_use(S,U), S=Sat },
 Gen = Units * Start,
-Amount = Initial+Gen-Cost.
+Amount = Initial+Gen-Cost,
+Amount <= Initial.
 
 % statystyki dot. ilosci akcji wykonywanych przez satelity
 executed(Sat,Cnt) :- satellite(Sat), Cnt = #count {A: execute(A,S), S=Sat }.
@@ -48,15 +42,18 @@ downlinked(Sat,Cnt) :- satellite(Sat), Cnt = #count {A: execute(A,S), action(A,d
 
 
 %% TEST
+
+% akcje nie moga sie na siebie nakladac
+:- time(Time), satellite(Sat), #count { Action : execute(Action,Sat), action_scheduled(Action,Sat,Start,End), Time>=Start, Time<=End} > 1.
+
 % wykluczyc modele z przekroczeniem pamieci
-:- sat_memory(Sat,Action,Val), memory_storage(Sat,Max),Val > Max.
+:- sat_memory(Sat,Action,Val), memory_storage(Sat,Max), action(Action,Type), satellite(Sat), Val > Max.
 
 % wykluczyc modele z wyczerpaniem energii
-:- sat_energy(Sat,Action,Val), Val < 1.
+:- sat_energy(Sat,Action,Val), action(Action,Type), satellite(Sat), Val < 1.
 
-% wykluczyc modele, w ktorych nie wykonano zadan awaryjnych
-:- not execute(Action,_), emergency_task(Action).
-
+% wykluczyc modele, w ktorych nie wykonano zadan awaryjnych (dowolny satelita)
+:- not execute(Action,_), action(Action,observe), emergency_task(Action).
 
 %% OPTIMISE
 % jakosc harmonogramowania zadan (suma priorytetow przipisanych zadan)
@@ -65,14 +62,15 @@ quality(X) :- X = #sum { Priority,Action : priority(Action,Priority), execute(Ac
 % maksymalizuj jakosc harmonogramowania
 #maximize { X@4 : quality(X) }.
 % minimalizuj ilosc akcji wykonanych
-#minimize { X@1 : executed(Sat,X) }.
+#minimize { X@1 : executed(Sat,X), satellite(Sat) }.
 
-#show emergency_task/1.
 #show execute/2.
 #show executed/2.
 #show observed/2.
 #show downlinked/2.
-#show sat_action_window/4.
+#show quality/1.
+#show action_scheduled/4.
+%*
 #show sat_memory/3.
 #show sat_energy/3.
-#show quality/1.
+*%

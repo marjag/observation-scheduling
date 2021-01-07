@@ -3,6 +3,10 @@
 
 import json
 
+'''
+Class Config holds app configuration
+with cooperation with settings.json
+'''
 class Config:
 	def __init__(self, root_dir, **kwargs):
 		self.root_dir = root_dir
@@ -19,12 +23,13 @@ class Config:
 		except FileNotFoundError:
 		    print("File {name} not found".format(name=fname))
 
-		# jsonData = '{"mama":"tata"}'
-		# self.data = json.loads(jsonData)
 		return None
 
 	def getRootDir(self):
 		return self.root_dir
+	
+	def getPath(self,to):
+		return self.root_dir + self.getParam('paths').get(to)
 
 	def getParam(self, key):
 		return self.data.get(key)

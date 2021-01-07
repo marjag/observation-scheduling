@@ -16,4 +16,4 @@ Copyright (C) Benjamin Kaufmann
 
 uruchamianie:
 
-$ clingo problem_instance.lp sheduling_problem_optimization.lp
+$ clingo scheduler.lp problem_instances/example_problem_instance.lp

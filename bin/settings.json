@@ -1,6 +1,18 @@
 {
-	"clingo_exec": "/bin/clingo-4.5.4-linux-x86_64/clingo",
-	"problem_encoding": "/scheduler.lp",
-	"problem_instances_dir": "/problem_instances/",
-	"report_file": "out.lp"
+	"paths": {
+		"clingo_exec": "/bin/clingo-4.5.4-linux-x86_64/clingo",
+		"problem_encoding": "/scheduler.lp",
+		"problem_instances_dir": "/problem_instances/",
+		"report_file": "/report.lp",
+		"tmp_file": "/tmp.mng"
+	},
+	"generating": {
+		"actions_probability": {
+			"observe": 0.80,
+			"downlink": 0.10,
+			"uplink": 0.10,
+			"emergency": 0.20
+		}
+
+	}
 }

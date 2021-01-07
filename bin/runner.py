@@ -3,26 +3,39 @@
 import glob
 import os
 
+'''
+Class Runner executes manager demanded actions
+'''
 class Runner():
-	def __init__(self, config):
+	def __init__(self, config, generator, parser):
 		self.config = config
+		self.generator = generator
+		self.parser = parser
 
-	def run(self, **kwargs):
+	def schedule(self, instance_path = '', **kwargs):
 		# clingo executable path
-		clingo = self.config.getRootDir() + self.config.getParam("clingo_exec")
+		clingo = self.config.getPath("clingo_exec")
 		# encoding logic program path
-		encoding = self.config.getRootDir() + self.config.getParam("problem_encoding")
+		encoding = self.config.getPath("problem_encoding")
 		# instances directory path
-		instances = self.config.getRootDir() + self.config.getParam("problem_instances_dir")
+		instances = self.config.getPath("problem_instances_dir")
 		# report file destination path
-		report_file = self.config.getRootDir() + self.config.getParam("report_file")
+		tmp_file = self.config.getPath("tmp_file")
 		# processing
-		ifile = glob.glob(instances + "*instance*.lp")[0]
-		print(ifile)
-		result = os.system(clingo + " " + encoding + " " + ifile)
-		exit()
-		pass
+		instance_path = instance_path if instance_path != '' else glob.glob(instances + "*instance*.lp")[0]
+		print("instancja " + instance_path)
 
-	def generate(self, **kwargs):
+		os.system(clingo + " " + encoding + " " + instance_path + " > " + tmp_file)
+		self.parser.process_file(tmp_file)
+		# clean
+		os.system("rm " + tmp_file)
 
-		pass
+	def generate(self, instances, **kwargs):
+		for i in range(0,instances):
+			self.generator.gen()
+
+	def prune(self):
+		instances = self.config.getPath("problem_instances_dir")
+		for file in glob.glob(instances + "instance_*.lp"):
+			print("usuwanie " + file + "...")
+			os.system("rm " + file)
