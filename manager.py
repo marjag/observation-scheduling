@@ -36,17 +36,24 @@ if (action == 'gen'):
 	cnt = int(option0) if int(option0) > 0 else 1
 	print("generowanie " + str(cnt) + " instancji...")
 	runner.generate(cnt)
+
 elif action == "schedule":
-	instance_path = option0
+	if option0 == '':
+		exit("Podaj plik instancji problemu do harmonogramowania")
 	print("harmonogramowanie...")
-	runner.schedule(instance_path)
+	runner.schedule(option0, answers=option1)
+
 elif action == "prune":
 	runner.prune()
+
 else:
 	print ('''Harmonogramowanie obserwacji satelitarnych, narzędzia:
 
 	python3 manager.py gen [n] - generuje n losowych instancji (domyślnie 1)
-	python3 manager.py schedule - optymalny harmonogram dla instancji, zapisuje raport
+	python3 manager.py schedule <p> [m] - optymalny harmonogram dla instancji (pliku) *p*, *m* najlepszych modeli
 	python3 manager.py prune - usuwa wygenerowane instancje
 	python3 manager.py help - pomoc
+
+	<a> - argument wymagany
+	[a] - argument niewymagany
 	''')

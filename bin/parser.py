@@ -5,6 +5,7 @@
 Class Parser parses clingo output
 '''
 class Parser:
+    next_line_facts = False
     def process_facts(self, facts):
         facts = facts.split(" ")
         facts.sort()
@@ -16,7 +17,9 @@ class Parser:
            return model 
         elif "answer" in line.lower():
             model['name'] = line
-        elif "execute" in line:
+            self.next_line_facts = True
+        elif self.next_line_facts == True:
+            self.next_line_facts = False
             model['facts'] = self.process_facts(line)
         elif "optimization" in line.lower():
             model['optimization'] = line
@@ -49,7 +52,9 @@ class Parser:
             print(fact)
         print()
 
-    def process_file(self,file_path):
+    '''
+    '''
+    def process_file(self,file_path,answers=1):
         '''
         DRIVER CODE
         '''
@@ -57,10 +62,13 @@ class Parser:
             with open(file_path) as f:
                 processed = []
                 content = f.readlines()
-                models = self.process(content)
-                for model in models.get("models"):
+                parsed = self.process(content)
+                models = parsed.get('models')
+                answers_found = len(models)
+                for model in models[answers_found-int(answers):]:
                     self.print_model(model)
         except ValueError:
+            # unsatisfiable
             print(''.join(content))
         except FileNotFoundError:
             print("File {name} not found".format(name=file_path))

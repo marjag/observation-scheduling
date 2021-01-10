@@ -12,7 +12,9 @@ class Runner():
 		self.generator = generator
 		self.parser = parser
 
-	def schedule(self, instance_path = '', **kwargs):
+	def schedule(self, instance_path, **kwargs):
+		# little bit more user-friendly (gets only file name, not full path)
+		instance_path = instance_path.split('/')[-1]
 		# clingo executable path
 		clingo = self.config.getPath("clingo_exec")
 		# encoding logic program path
@@ -22,11 +24,13 @@ class Runner():
 		# report file destination path
 		tmp_file = self.config.getPath("tmp_file")
 		# processing
-		instance_path = instance_path if instance_path != '' else glob.glob(instances + "*instance*.lp")[0]
-		print("instancja " + instance_path)
+		instance_path = instances + instance_path
+		if os.path.isfile(instance_path) == False:
+			exit("Nie ma takiego pliku: " + instance_path)
 
+		print("instancja " + instance_path)
 		os.system(clingo + " " + encoding + " " + instance_path + " > " + tmp_file)
-		self.parser.process_file(tmp_file)
+		self.parser.process_file(tmp_file, kwargs.get('answers') or 1)
 		# clean
 		os.system("rm " + tmp_file)
 
