@@ -33,7 +33,11 @@ config = Config(root_dir)
 runner = Runner(config, Generator(config, Utils()), Parser())
 
 if (action == 'gen'):
-	cnt = int(option0) if int(option0) > 0 else 1
+	if option0 == '':
+		cnt = 1
+	else:
+		cnt = int(option0)
+
 	print("generowanie " + str(cnt) + " instancji...")
 	runner.generate(cnt)
 

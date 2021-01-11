@@ -35,6 +35,11 @@ class Runner():
 		os.system("rm " + tmp_file)
 
 	def generate(self, instances, **kwargs):
+		# make instances directory if not exists
+		instances_dir = self.config.getPath("problem_instances_dir")
+		if os.path.isdir(instances_dir) == False:
+			os.mkdir(instances_dir, mode=0o777)
+
 		for i in range(0,instances):
 			self.generator.gen()
 
