@@ -8,12 +8,12 @@ class Utils:
 	def __init__(self):
 		return None
 
-	def rand_satellites(self, cnt=0):
-		collection = ["cubesat", "stsat", "ohsumi", "prospero", "strela",
-		"omid", "hotbird", "kosmos", "observer", "landsat", "tiros", "sentinel"]
-		shuffle(collection)
+	def rand_orbits(self, cnt=0):
 		cnt = cnt if cnt > 0 else randrange(1, len(collection))
-		return collection[:cnt]
+		orbits = []
+		for x in range(1,cnt+1):
+			orbits.append(x)
+		return orbits
 
 	def rand_use(self):
 		return self.rand_tens()
@@ -43,6 +43,12 @@ class Utils:
 		if draw <= probab:
 			return True
 		return False
+
+	def rand_visibility(self,action,orbit,probab=0.75):
+		draw = randrange(0,100) / 100
+		if 1-draw <= probab:
+			return [str(action),str(orbit),"1"]
+		return [str(action),str(orbit),"0"]
 
 	def rand_digit(self):
 		return randrange(1,10)
