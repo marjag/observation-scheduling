@@ -1,15 +1,14 @@
-% Problem encoding
 %% GENERATE
 % okres harmonogramowania [s]
 time(1..1800). % 30 minut
 
 % przypisac satelite do wykonywanej akcji, dla kazdej akcji
 % obserwacja - moze byc wykonana na jednej z orbit z ktorej widac dany obszar
-{ execute(Action,Sat) : orbit(Sat), visible(Action,Sat,1) } 1 :- action(Action,observe).
+{ execute(Action,O) : orbit(O), visible(Action,O,1) } 1 :- action(Action,observe).
 % downlink - moze, ale nie musi byc wykonane
-{ execute(Action,Sat) : orbit(Sat), visible(Action,Sat,1) } :- action(Action,downlink).
+{ execute(Action,O) : orbit(O), visible(Action,O,1) } :- action(Action,downlink).
 % uplink - musi byc wykonane przez wszystkie satelity majace mozliwosc wykonania
-execute(Action,Sat) :- orbit(Sat), visible(Action,Sat,1), action(Action,uplink).
+execute(Action,O) :- orbit(O), visible(Action,O,1), action(Action,uplink).
 
 % wybrac z mozliwych czas wykonywania zadan dla okna kazdej akcji, dla kazdego satelity
 % czas wykonywania akcji musi miescic sie w dostepnych oknach czasowych
@@ -18,47 +17,49 @@ time(Start),
 End = Start+Duration-1,
 Start >= WStart,
 End <= WEnd
- } 1 :- execute(Action,Sat), orbit(Sat), action(Action,Type), sat_action_time(Sat,Type,Duration), action_type(Type).
+ } 1 :- execute(Action,O), orbit(O), action(Action,Type), sat_action_time(satellite(O),Type,Duration), action_type(Type), satellite(orbit(O),Sat).
 
 % parametry satelity
 % zuzycie pamieci satelit w danym czasie
 % downlink zwalnia zuzyta pamiec
-sat_memory(Sat,Action,0) :- execute(Action,Sat), action(Action,downlink), orbit(Sat).
+sat_memory(O,Action,0) :- execute(Action,O), action(Action,downlink), orbit(O).
 % obserwacje zajmuja pamiec
-sat_memory(Sat,Action,Use) :- execute(Action,Sat), action(Action,observe), orbit(Sat),
-LastDownlink = #max {A: execute(A,S), action(A,downlink), S=Sat, A < Action },
-Use = #sum {Units,A,D,S: execute(A,S), action(A,observe), memory_use(S,Units), A <= Action, A > D, S=Sat, D=LastDownlink }.
+sat_memory(O,Action,Use) :- execute(Action,O), action(Action,observe), orbit(O),
+LastDownlink = #max {A: execute(A,O), action(A,downlink), S=O, A < Action },
+Use = #sum {Units,A,D,S: execute(A,O), action(A,observe), memory_use(satellite(O),Units), A <= Action, A > D, S=O, D=LastDownlink }.
 
 % zuzycie energii
-sat_energy(Sat,Action,Amount) :- execute(Action,Sat), orbit(Sat),
-sat_energy(Sat,0,Initial), energy_gen(Sat,Units), action_scheduled(Action,Sat,Start,End),
-Cost = #sum { U,A : execute(A,S), A <= Action, energy_use(S,U), S=Sat },
+sat_energy(O,Action,Amount) :- execute(Action,O), satellite(orbit(O),Sat),
+sat_energy(O,0,Initial), energy_gen(satellite(orbit(O)),Units), action_scheduled(Action,O,Start,End),
+Cost = #sum { U,A : execute(A,Or), A <= Action, energy_use(satellite(orbit(Or)),U), Or=O },
 Gen = Units * Start,
 Amount = Initial+Gen-Cost,
 Amount <= Initial.
+% maksymalne naladowanie akumulatora
+sat_energy(O,Action,Max) :- sat_energy(O,Action,Amount), Amount > Max, energy_storage(satellite(O),Max).
 
 % statystyki dot. ilosci akcji wykonywanych przez satelity
-executed(Sat,Cnt) :- orbit(Sat), Cnt = #count {A: execute(A,S), S=Sat }.
-observed(Sat,Cnt) :- orbit(Sat), Cnt = #count {A: execute(A,S), action(A,observe), S=Sat }.
-downlinked(Sat,Cnt) :- orbit(Sat), Cnt = #count {A: execute(A,S), action(A,downlink), S=Sat }.
+executed(S,Cnt) :- satellite(orbit(O),S), Cnt = #count {A: execute(A,O) }.
+observed(S,Cnt) :- satellite(orbit(O),S), Cnt = #count {A: execute(A,O), action(A,observe) }.
+downlinked(S,Cnt) :- satellite(orbit(O),S), Cnt = #count {A: execute(A,O), action(A,downlink) }.
 
 %% TEST
 
 % akcje nie moga sie na siebie nakladac
-:- time(Time), orbit(Sat), #count { Action : execute(Action,Sat), action_scheduled(Action,Sat,Start,End), Time>=Start, Time<=End} > 1.
+:- time(Time), orbit(O), #count { Action : execute(Action,O), action_scheduled(Action,satellite(O),Start,End), Time>=Start, Time<=End} > 1.
 
 % wykluczyc modele z przekroczeniem pamieci
-:- sat_memory(Sat,Action,Val), memory_storage(Sat,Max), action(Action,Type), orbit(Sat), Val > Max.
+:- sat_memory(O,Action,Val), memory_storage(satellite(O),Max), action(Action,Type), orbit(O), Val > Max.
 
 % wykluczyc modele z wyczerpaniem energii
-:- sat_energy(Sat,Action,Val), action(Action,Type), orbit(Sat), Val < 1.
+:- sat_energy(O,Action,Val), action(Action,Type), orbit(O), Val < 1.
 
 % wykluczyc modele, w ktorych nie wykonano istniejacych zadan awaryjnych
 :- not execute(Action,_), action(Action,observe), emergency_task(Action).
 
 %% OPTIMISE
 % jakosc harmonogramowania zadan (suma priorytetow przipisanych zadan)
-quality(X) :- X = #sum { Priority,Action : priority(Action,Priority), execute(Action,Sat) }.
+quality(X) :- X = #sum { Priority,Action : priority(Action,Priority), execute(Action,O) }.
 
 % maksymalizacja jakosci harmonogramowania
 #maximize { X@5 : quality(X) }.
@@ -66,9 +67,9 @@ quality(X) :- X = #sum { Priority,Action : priority(Action,Priority), execute(Ac
 % inne mozliwosci...
 %*
 memory_used(X) :- 
-X = #sum { U,Sat: observed(Sat,Cnt), memory_use(Sat,Use), U=Use*Cnt }.
+X = #sum { U,O: observed(O,Cnt), memory_use(satellite(O),Use), U=Use*Cnt }.
 energy_used(X) :- 
-X = #sum { U,Sat: executed(Sat,Cnt), energy_use(Sat,Use), U=Use*Cnt }.
+X = #sum { U,O: executed(O,Cnt), energy_use(O,Use), U=Use*Cnt }.
 % minimalizacja sumy zuzycia energii
 #minimize { X@1 : energy_used(X) }.
 % minimalizacja sumy zuzycia pamieci

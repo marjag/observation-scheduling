@@ -12,7 +12,7 @@
 			"downlink": 0.10,
 			"uplink": 0.10,
 			"emergency": 0.20,
-			"visibility": 0.75
+			"visibility": 0.85
 		}
 
 	}

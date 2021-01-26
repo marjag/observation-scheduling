@@ -39,7 +39,6 @@ class Generator:
 		# constants
 		# 1 hour random instance
 		interval = 1800
-		model["time"] = [["1.." + str(interval)]]
 		model["action_type"] = [["observe"], ["uplink"], ["downlink"]]
 
 		# randomized
@@ -47,39 +46,41 @@ class Generator:
 		n = 3
 		# density of actions
 		density = 0.2
-		action_cnt = 30
+		action_cnt = 25
 		orbits = self.utils.rand_orbits(n)
 		# draw orbits action executing parameters
-		for sat in orbits:
+		for orbit in orbits:
 			for action in model.get("action_type"):
 				if action[0] == 'observe':
 					sat_action_time = self.utils.rand_sat_observe_time()
 				else:
 					sat_action_time = self.utils.rand_sat_link_time()
-				model['sat_action_time'].append([str(sat),action[0],str(sat_action_time)])
+				satellite = 'satellite(' + str(orbit) + ')'
+				model['sat_action_time'].append([satellite,action[0],str(sat_action_time)])
 
 		# draw actions (tasks) to perform
 		actions = self.utils.rand_actions(action_cnt, probab_obs, probab_down, probab_up)
 		model["action"] = actions
 
 		# draw satellites' technical resources
-		for sat in orbits:
-			sat = str(sat)
+		for orbit in orbits:
+			orbit = str(orbit)
+			satellite = 'satellite(' + orbit + ')'
 			energy_gen = self.utils.rand_digit()
 			memory_use = self.utils.rand_use()
 			energy_use = self.utils.rand_use()
 			memory_storage = self.utils.rand_storage()
 			energy_storage = self.utils.rand_storage()
 			initial_energy = energy_storage
-			model['orbit'].append([sat])
-			model['satellite'].append([sat, "sat_"+sat])
-			model["sat_energy"].append([sat,"0",str(initial_energy)])
-			model["sat_memory"].append([sat,"0","0"])
-			model["memory_storage"].append([sat,str(memory_storage)])
-			model["energy_storage"].append([sat,str(energy_storage)])
-			model["memory_use"].append([sat,str(memory_use)])
-			model["energy_use"].append([sat,str(energy_use)])
-			model["energy_gen"].append([sat,str(energy_gen)])
+			model['orbit'].append([orbit])
+			model['satellite'].append(['orbit('+orbit+')', "sat_"+orbit])
+			model["sat_energy"].append([satellite,"0",str(initial_energy)])
+			model["sat_memory"].append([satellite,"0","0"])
+			model["memory_storage"].append([satellite,str(memory_storage)])
+			model["energy_storage"].append([satellite,str(energy_storage)])
+			model["memory_use"].append([satellite,str(memory_use)])
+			model["energy_use"].append([satellite,str(energy_use)])
+			model["energy_gen"].append([satellite,str(energy_gen)])
 
 		# draw actions' priorities, visibility and and its executable time window
 		has_emergency = False
@@ -98,8 +99,8 @@ class Generator:
 					model['emergency_task'].append([str(action_index)])
 					has_emergency = True
 
-			for sat in orbits:
-				model['visible'].append(self.utils.rand_visibility(action_index,sat,probab_visibility))
+			for orbit in orbits:
+				model['visible'].append(self.utils.rand_visibility(action_index,orbit,probab_visibility))
 		
 		return model
 
