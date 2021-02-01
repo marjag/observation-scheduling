@@ -9,7 +9,7 @@ class Utils:
 		return None
 
 	def rand_orbits(self, cnt=0):
-		cnt = cnt if cnt > 0 else randrange(1, len(collection))
+		cnt = cnt if cnt > 0 else randrange(3, 5)
 		orbits = []
 		for x in range(1,cnt+1):
 			orbits.append(x)

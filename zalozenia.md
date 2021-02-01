@@ -6,36 +6,6 @@ Model dla problemu łączenia zadań z satelitami powinien zawierać:
 - zadania awaryjne,
 - stacje kontrolne.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-Założenia:
-
-1. Koszt pamięciowy każdego zadania jest jednakowy, zatem dostępna pamięć jest liczona w jednostce zadań.
-2. Dostarczanie danych dotyczących zadań odbywa się, gdy satelita znajduje się nad stacją naziemną. Okno czasowe dostarczenia obejmuje całe okno czasowe widoczności stacji.
-3. Odbieranie harmonogramu odbywa się, gdy satelita znajduje się nad stacją kontrolną. Okno czasowe odbioru obejmuje całe okno czasowe widoczności stacji.
-Ograniczenia: 
-- satelita może zajmować w danym czasie jedną orbitę
-- orbitę może zajmować w danym czasie tylko jeden satelita
-- każde zadanie może być wykonane maksymalnie 1 raz
-- każde okno czasowe widoczności stacji kontrolnej musi być wykorzystane na wykonanie odbierania danych przez satelite
-- każde okno czasowe widoczności stacji naziemniej musi być wykorzystane na wykonanie wysyłania danych przez satelite
-- żadne okno czasowe nie może nakładać się na drugie
-- wykonywanie zadania musi odbyć się w jego dostępnym oknie czasowym widoczności
-- każdy satelita może pomieścić maksymalnie tyle danych z zadań ile wynosi jego pamięć
-- pomiędzy stacjami naziemnymi można wykonac maksymalna ilość zadan związana z pamięcią satelity
-
-
 Modele
 
 MODEL I

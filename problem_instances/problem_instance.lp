@@ -1,25 +1,5 @@
 % Problem Instance
 
-% visibility of task i on orbit j (decision variable)
-visible(1,1,1).
-visible(2,1,1).
-visible(3,1,1).
-visible(4,1,1).
-visible(5,1,1).
-visible(6,1,1).
-visible(7,1,1).
-visible(8,1,1).
-visible(9,1,1).
-visible(1,2,1).
-visible(2,2,1).
-visible(3,2,1).
-visible(4,2,1).
-visible(5,2,1).
-visible(6,2,1).
-visible(7,2,1).
-visible(8,2,1).
-visible(9,2,1).
-
 % orbits
 orbit(1). orbit(2).
 
@@ -41,6 +21,26 @@ action(8,observe).
 action(9,uplink).
 %*
 *%
+
+% visibility of task i on orbit j (decision variable)
+visible(1,1,1).
+visible(2,1,1).
+visible(3,1,1).
+visible(4,1,1).
+visible(5,1,1).
+visible(6,1,1).
+visible(7,1,1).
+visible(8,1,1).
+visible(9,1,1).
+visible(1,2,1).
+visible(2,2,1).
+visible(3,2,1).
+visible(4,2,1).
+visible(5,2,1).
+visible(6,2,1).
+visible(7,2,1).
+visible(8,2,1).
+visible(9,2,1).
 
 % zadania awaryjne
 emergency_task(1).

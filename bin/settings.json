@@ -11,8 +11,8 @@
 			"observe": 0.80,
 			"downlink": 0.10,
 			"uplink": 0.10,
-			"emergency": 0.20,
-			"visibility": 0.85
+			"emergency": 0.25,
+			"visibility": 0.80
 		}
 
 	}

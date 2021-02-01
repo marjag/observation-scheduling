@@ -12,13 +12,15 @@ execute(Action,O) :- orbit(O), visible(Action,O,1), action(Action,uplink).
 
 % wybrac z mozliwych czas wykonywania zadan dla okna kazdej akcji, dla kazdego satelity
 % czas wykonywania akcji musi miescic sie w dostepnych oknach czasowych
-1 { action_scheduled(Action,Sat,Start,End) : action_window(Action,WStart,WEnd),
+1 { action_scheduled(Action,Sat,Time,End) : action_window(Action,WStart,WEnd),
 time(Start),
 End = Start+Duration-1,
 Start >= WStart,
 End <= WEnd
  } 1 :- execute(Action,O), orbit(O), action(Action,Type), sat_action_time(satellite(O),Type,Duration), action_type(Type), satellite(orbit(O),Sat).
 
+
+%% DEFINE
 % parametry satelity
 % zuzycie pamieci satelit w danym czasie
 % downlink zwalnia zuzyta pamiec
@@ -43,8 +45,9 @@ executed(S,Cnt) :- satellite(orbit(O),S), Cnt = #count {A: execute(A,O) }.
 observed(S,Cnt) :- satellite(orbit(O),S), Cnt = #count {A: execute(A,O), action(A,observe) }.
 downlinked(S,Cnt) :- satellite(orbit(O),S), Cnt = #count {A: execute(A,O), action(A,downlink) }.
 
-%% TEST
 
+
+%% TEST
 % akcje nie moga sie na siebie nakladac
 :- time(Time), orbit(O), #count { Action : execute(Action,O), action_scheduled(Action,satellite(O),Start,End), Time>=Start, Time<=End} > 1.
 
@@ -57,6 +60,8 @@ downlinked(S,Cnt) :- satellite(orbit(O),S), Cnt = #count {A: execute(A,O), actio
 % wykluczyc modele, w ktorych nie wykonano istniejacych zadan awaryjnych
 :- not execute(Action,_), action(Action,observe), emergency_task(Action).
 
+
+
 %% OPTIMISE
 % jakosc harmonogramowania zadan (suma priorytetow przipisanych zadan)
 quality(X) :- X = #sum { Priority,Action : priority(Action,Priority), execute(Action,O) }.
@@ -64,7 +69,9 @@ quality(X) :- X = #sum { Priority,Action : priority(Action,Priority), execute(Ac
 % maksymalizacja jakosci harmonogramowania
 #maximize { X@5 : quality(X) }.
 
-% inne mozliwosci...
+
+
+% inne mozliwosci optymalizacji...
 %*
 memory_used(X) :- 
 X = #sum { U,O: observed(O,Cnt), memory_use(satellite(O),Use), U=Use*Cnt }.
@@ -78,13 +85,16 @@ X = #sum { U,O: executed(O,Cnt), energy_use(O,Use), U=Use*Cnt }.
 #show energy_used/1.
 *%
 
+
+
+%% DISPLAY
 #show action_scheduled/4.
 #show executed/2.
 #show observed/2.
 #show downlinked/2.
 #show quality/1.
 #show sat_memory/3.
+#show sat_energy/3.
 %*
 #show execute/2.
-#show sat_energy/3.
 *%

@@ -42,7 +42,7 @@ class Generator:
 		model["action_type"] = [["observe"], ["uplink"], ["downlink"]]
 
 		# randomized
-		# draw n orbits (0 - random number of orbits)
+		# draw n orbits (0 - random 3-4)
 		n = 3
 		# density of actions
 		density = 0.2
