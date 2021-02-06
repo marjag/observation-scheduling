@@ -13,6 +13,12 @@ class Task:
 		self.visible_at = visible_at
 		self.priority = priority
 		self.assigned_to = []
+		self.cardinality_min = 1
+		self.cardinality_max = 1
+		if task_type != 'O':
+			self.cardinality_max = 99999
+			
+
 
 	def get_task_id(self):
 		return self.task_id
@@ -32,8 +38,15 @@ class Task:
 	def is_visible_at(self,orbit):
 		return orbit in self.visible_at
 
-	def assign(self,satellite):
-		self.assigned_to = satellite
+	def assign(self,satellites):
+		for sat in satellites:
+			starts = sat.execute_window_start(self)
+			if starts == 0:
+				raise Exception("Cannot assign to orbit " + str(sat.orbit))
+			ends = starts + sat.get_action_time(self)
+			print("assigns " + self.task_id + " at " + sat.sat_name + " " + str(starts) + " to " + str(ends))
+			sat.set_busy(starts, ends)
+		self.assigned_to = satellites
 
 	def is_assigned(self):
 		return len(self.assigned_to) > 0

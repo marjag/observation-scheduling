@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
+from copy import copy
 '''
 Class Satellite
 '''
@@ -25,32 +26,14 @@ class Satellite:
 		self.can_observe = int(memory_storage / memory_use)
 		self.sat_name = sat_name if sat_name else orbit
 
-	def get_energy_use(self):
-		return self.energy_use
-
-	def get_memory_use(self):
-		return self.memory_use
-
-	def get_energy_gen(self):
-		return self.energy_gen
-
-	def get_observe_time(self):
-		return self.observe_time
-
-	def get_downlink_time(self):
-		return self.downlink_time
-
-	def get_uplink_time(self):
-		return self.uplink_time
-
-	def get_memory_storage(self):
-		return self.memory_storage
-
-	def get_energy_storage(self):
-		return self.energy_storage
-
-	def get_orbit(self):
-		return self.orbit
+	def get_action_time(self,Task):
+		if Task.task_type == 'O':
+			return self.observe_time
+		elif Task.task_type == 'D':
+			return self.downlink_time
+		elif Task.task_type == 'U':
+			return self.uplink_time
+		raise Exception("Bad task type")
 
 	def has_more_memory(self):
 		return self.observed < self.can_observe
@@ -62,9 +45,22 @@ class Satellite:
 		self.observed += 1
 
 	def set_busy(self,from_,to):
+		self_ = copy(self)
 		for x in range(from_,to):
-			self.busy.append(x)
+			self_.busy.append(x)
+		return self_
 
 	def is_busy_at(self,time):
 		return (time in self.busy)
+
+	def execute_window_start(self,Task):
+		execute_duration = self.observe_time
+		t_window_duration = Task.w_end - Task.w_start
+		time = Task.w_start - 1
+		while time < Task.w_end - execute_duration:
+			time += 1
+			if self.is_busy_at(time):
+				continue
+			return time
+		return 0
 
