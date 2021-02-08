@@ -26,41 +26,20 @@ class Satellite:
 		self.can_observe = int(memory_storage / memory_use)
 		self.sat_name = sat_name if sat_name else orbit
 
-	def get_action_time(self,Task):
-		if Task.task_type == 'O':
-			return self.observe_time
-		elif Task.task_type == 'D':
-			return self.downlink_time
-		elif Task.task_type == 'U':
-			return self.uplink_time
-		raise Exception("Bad task type")
-
-	def has_more_memory(self):
-		return self.observed < self.can_observe
-
-	def has_more_energy(self):
-		return True
-
-	def increment_observed(self):
-		self.observed += 1
-
-	def set_busy(self,from_,to):
-		self_ = copy(self)
-		for x in range(from_,to):
-			self_.busy.append(x)
-		return self_
-
-	def is_busy_at(self,time):
-		return (time in self.busy)
-
-	def execute_window_start(self,Task):
-		execute_duration = self.observe_time
-		t_window_duration = Task.w_end - Task.w_start
-		time = Task.w_start - 1
-		while time < Task.w_end - execute_duration:
-			time += 1
-			if self.is_busy_at(time):
-				continue
-			return time
-		return 0
+	def get(self):
+		o = {}
+		o['orbit'] = self.orbit
+		o['memory_use'] = self.memory_use
+		o['energy_use'] = self.energy_use
+		o['energy_gen'] = self.energy_gen
+		o['memory_storage'] = self.memory_storage
+		o['energy_storage'] = self.energy_storage
+		o['observe_time'] = self.observe_time
+		o['downlink_time'] = self.downlink_time
+		o['uplink_time'] = self.uplink_time
+		o['busy'] = self.busy
+		o['observed'] = self.observed
+		o['can_observe'] = self.can_observe
+		o['sat_name'] = self.sat_name
+		return o
 
