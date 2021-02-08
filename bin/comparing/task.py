@@ -10,6 +10,8 @@ class Task:
 		self.task_id = task_id
 		self.w_start = w_start
 		self.w_end = w_end
+		self.start = 0
+		self.end = 0
 		self.task_type = task_type
 		self.visible_at = visible_at
 		self.priority = priority
@@ -30,7 +32,6 @@ class Task:
 		o['assigned_to'] = self.assigned_to
 		o['cardinality_min'] = self.cardinality_min
 		o['cardinality_max'] = self.cardinality_max
-		o["orbits"] = self.assigned_to
 		return o
 
 	def serialize(self):
@@ -41,5 +42,6 @@ class Task:
 		o["task_type"] = self.task_type
 		o["visible_at"] = self.visible_at
 		o["priority"] = self.priority
-		o["orbits"] = self.assigned_to
+		o["start"] = self.start
+		o["end"] = self.end
 		return o

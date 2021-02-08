@@ -21,8 +21,11 @@ class BnB:
 		return 3 * satellite.get('observe_time') + 2 * satellite.get('memory_use') + satellite.get('energy_use') - task.get('priority')
 
 	def can_execute(self,task,satellite):
-		return task.is_visible_at(satellite.get('orbit')) and has_more_memory(satellite) and has_more_energy(satellite)
-
+		# if task.get('task_type') == 'O':
+		# 	if self.has_more_memory(satellite):
+		# 		return False
+		# return self.is_visible_at(task,satellite) and self.has_more_energy(satellite)
+		return True
 
 	def add_solution(self,solution):
 		solution_ = []
@@ -53,56 +56,66 @@ class BnB:
 			self.print_solution(solution)
 
 	''' Branches '''
-	def branch(self,done,rest,satellites):
+	def branch(self,done_,rest,satellites):
 		# for x in range(0,len(satellites)):
 		# 	satellites[x] = deepcopy(satellites[x])
 		if len(rest) < 1:
-			if len(done) == self.tasks:
-				self.add_solution(done)
+			if len(done_) == self.tasks:
+				self.add_solution(done_)
 			return self.done
 		else:
 			# analyze current
 			rest = deepcopy(rest)
-			task = rest.pop(0)
-			task = deepcopy(task)
-			assignments = self.sat_combinations(task,satellites)
-			for sats in assignments:
-				sats = deepcopy(sats)
-				# dead branch, last node
-				if self.is_dead(task,sats):
-					pass
-					# self.branch(deepcopy(done),[],satellites)
-				else:
-					print("task " + task.get('task_id') + " by "+str(len(sats))+': ' + self.sats_name(sats) +'\n')
-					self.assign(task,sats)
+			task_ = rest.pop(0)
+			# print(satellites_)
+			assignments = self.sat_combinations(task_,satellites)
+			for assign in assignments:
+				done = deepcopy(done_)
+				task = deepcopy(task_)
+				try:
+					self.is_dead(task,assign)
+					copy = []
+					print("task " + task.get('task_id') + " by "+str(len(assign))+': ' + self.sats_name(assign))
+					for Sat in satellites:
+						if Sat in assign:
+							Sat = deepcopy(Sat)
+							start = task.get('w_start')
+							end = start+self.get_action_time(Sat,task)
+							self.set_busy(Sat,start,end)
+							self.assign(task,Sat,start,end)
+						copy.append(Sat)
 					done.append(task)
-					# self.print_node(done_,rest_,satellites)
-					self.branch(done,rest,satellites)
+					self.branch(done,rest,copy)
+				except Exception as e:
+					# dead branch, last node, return what was done
+					self.branch(done,[],[])
+
 
 	''' Bounds a branch '''
 	def is_dead(self,task,assignment):
-		return False
 		# execute action at max|min orbits bounds (cardinality)
 		assigned_cnt = len(assignment)
-		if assigned_cnt > task.cardinality_max or assigned_cnt < task.cardinality_min:
-			return True
+		if assigned_cnt > task.get('cardinality_max') or assigned_cnt < task.get('cardinality_min'):
+			raise Exception("Dead, to much assigned to a task")
 
 		# visibility bounds, non-concurrent actions bounds
 		for sat in assignment:
+			name = sat.get('sat_name')
 			# memory|energy bounds
-			if not self.can_execute(task,sat):
-				return True
-			if sat.execute_window_start(task) == 0:
-				return True
+			if not self.can_execute(task,sat): #todo
+				raise Exception("Dead, no memory at "+name)
+			if self.execute_window_start(sat,task) == 0:
+				raise Exception("Dead, no available window at "+name)
 
 		# uplink at all visible orbits
-		if task.task_type == 'U':
-			if len(task.visible_at) != len(assignment):
-				return True
+		if task.get('task_type') == 'U':
+			if len(task.get('visible_at')) != len(assignment):
+				id_ = task.get('task_id')
+				raise Exception("Uplink "+ id_ + " should use all visible orbits")
 		return False
 
 	def sat_combinations(self,task,satellites):
-		# satellites = ['A', 'B']
+		# return [[satellites[0]],[satellites[1]]]
 		result = []
 		for x in range(1,len(satellites)+1):
 			c = list(combinations(satellites, x))
@@ -111,10 +124,25 @@ class BnB:
 				result.append(x)
 		return result
 
+	def assign(self,task,Sat,start,end):
+		orbit = Sat.get('orbit')
+		task['assigned_to'].append([orbit,start,end-1])
+		return task
+		# starts = self.execute_window_start(Sat,Task)
+		starts = Task.get('w_start')
+		if starts == 0:
+			return 0
+			# raise Exception("Cannot assign " + Task.get('task_id') + " to " + str(Sat.get('sat_name')) + ", no available window")
+		ends = starts + self.get_action_time(Sat,Task)
+		# print(Sat.get('busy'))
+		self.set_busy(Sat,starts,ends)
+		# print(Sat.get('busy'))
+		# print()
+	def action(self,Sat,task):
+		pass
 
 	def has_more_memory(self,sat):
 		return sat.get('observed') < sat.get('can_observe')
-
 
 	def has_more_energy(self,sat):
 		return True
@@ -122,18 +150,8 @@ class BnB:
 	def increment_observed(self,sat):
 		sat['observed'] = sat.get('observed') + 1
 
-	def is_visible_at(self,orbit):
-		return orbit in self.visible_at
-
-	def assign(self,Task,satellites):
-		for Sat in satellites:
-			print(Sat.get('busy'))
-			starts = self.execute_window_start(Sat,Task)
-			if starts == 0:
-				raise Exception("Cannot assign " + Task.get('task_id') + " to " + str(Sat.get('sat_name')) + ", no available window")
-			ends = starts + self.get_action_time(Sat,Task)
-			self.set_busy(Sat,starts,ends)
-			Task['assigned_to'].append(Sat.get('orbit'))
+	def is_visible_at(self,sat,task):
+		return sat.get('sat_name') in task.get('visible_at')
 
 	def is_assigned(self,task):
 		return len(task.get('assigned_to')) > 0
@@ -141,19 +159,18 @@ class BnB:
 	def get_assigned_to(self,task):
 		return task.get('assigned_to');
 
-	def get_action_time(self,Sat,Task):
-		if Task.get('task_type') == 'O':
+	def get_action_time(self,Sat,task):
+		if task.get('task_type') == 'O':
 			return Sat.get('observe_time')
-		elif Task.get('task_type') == 'D':
+		elif task.get('task_type') == 'D':
 			return Sat.get('downlink_time')
-		elif Task.get('task_type') == 'U':
+		elif task.get('task_type') == 'U':
 			return Sat.get('uplink_time')
 		raise Exception("Bad task type")
 
 	def set_busy(self,Sat,from_,to):
 		for x in range(from_,to):
 			Sat['busy'].append(x)
-		return Sat
 
 	def is_busy_at(self,Sat,time):
 		return (time in Sat.get('busy'))
@@ -167,7 +184,7 @@ class BnB:
 			if self.is_busy_at(Sat,time):
 				continue
 			return time
-		return 1
+		return 0
 
 
 	'''DEBUG'''
@@ -198,9 +215,10 @@ class BnB:
 	def print_solution(self,serialized):
 		for task in serialized:
 			tid = task.get('task_id')
-			orbits = task.get('orbits')
+			assigned_to = task.get('assigned_to')
 			print(tid)
-			print(orbits)
+			for assignment in assigned_to:
+				print(assignment)
 			
 			# at = ', '.join(orbits)
 			# print('task: ' + tid + ', at: ' + at)
