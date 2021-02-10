@@ -23,6 +23,7 @@ class Satellite:
 		self.uplink_time = uplink_time
 		self.busy = []
 		self.observed = 0
+		self.energy = energy_storage
 		self.can_observe = int(memory_storage / memory_use)
 		self.sat_name = sat_name if sat_name else orbit
 
@@ -41,5 +42,6 @@ class Satellite:
 		o['observed'] = self.observed
 		o['can_observe'] = self.can_observe
 		o['sat_name'] = self.sat_name
+		o['energy'] = self.energy
 		return o
 
