@@ -12,12 +12,12 @@ execute(Action,O) :- orbit(O), visible(Action,O,1), action(Action,uplink).
 
 % wybrac z mozliwych czas wykonywania zadan dla okna kazdej akcji, dla kazdego satelity
 % czas wykonywania akcji musi miescic sie w dostepnych oknach czasowych
-1 { action_scheduled(Action,Sat,Time,End) : action_window(Action,WStart,WEnd),
+1 { action_scheduled(Action,Sat,Start,End) : action_window(Action,WStart,WEnd),
 time(Start),
 End = Start+Duration-1,
 Start >= WStart,
 End <= WEnd
- } 1 :- execute(Action,O), orbit(O), action(Action,Type), sat_action_time(satellite(O),Type,Duration), action_type(Type), satellite(orbit(O),Sat).
+} 1 :- execute(Action,O), orbit(O), action(Action,Type), sat_action_time(satellite(O),Type,Duration), action_type(Type), satellite(orbit(O),Sat).
 
 
 %% DEFINE
