@@ -23,9 +23,9 @@ class Task:
 	def get(self):
 		o = {}
 		o['task_id'] = self.task_id
+		o['task_type'] = self.task_type
 		o['w_start'] = self.w_start
 		o['w_end'] = self.w_end
-		o['task_type'] = self.task_type
 		o['visible_at'] = self.visible_at
 		o['priority'] = self.priority
 		o['assigned_to'] = self.assigned_to

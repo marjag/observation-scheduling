@@ -3,6 +3,7 @@
 		"clingo_exec": "/bin/clingo-4.5.4-linux-x86_64/clingo",
 		"problem_encoding": "/scheduler.lp",
 		"problem_instances_dir": "/problem_instances/",
+		"compare_instances_json": "/bin/comparing/problems.json",
 		"report_file": "/report.lp",
 		"tmp_file": "/tmp.mng"
 	},

@@ -4,7 +4,11 @@
 from task import Task
 from satellite import Satellite
 from bnb import BnB
-
+from operator import itemgetter
+from json import loads
+data = loads('{"problems":[]}')
+print(data)
+exit()
 # s_1 = Satellite(
 # 	orbit="A",
 # 	memory_use=10,
@@ -96,7 +100,7 @@ s_3 = Satellite(
 	uplink_time=2,
 	sat_name="sentinel"
 ).get()
-orbits = [s_1,s_2,s_3]
+orbits = [s_1,s_2]
 
 visible_at_all = []
 for x in orbits:
@@ -113,8 +117,7 @@ tasks.append(Task(7,32,35,"O",visible_at_all,3).get())
 tasks.append(Task(8,32,34,"O",visible_at_all,1).get())
 tasks.append(Task(9,35,38,"U",visible_at_all,1).get())
 
-
 bnb = BnB()
-answers = bnb.run(tasks=tasks,satellites=orbits,max_solutions=0)
-bnb.print_solutions(answers)
+solutions = bnb.run(tasks=tasks,satellites=orbits,max_solutions=1)
+bnb.print_solutions(solutions)
 print("\nfinished in " + str(bnb.timer) + " s.")

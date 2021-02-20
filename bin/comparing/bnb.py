@@ -14,7 +14,6 @@ Class BnB
 '''
 class BnB:
 	def __init__(self):
-		self.tasks = 0
 		self.timer = 0
 		self.done = []
 		self.solutions = []
@@ -57,7 +56,7 @@ class BnB:
 		self.timer = 0
 		self.done = []
 		self.solutions = []
-		self.tasks = len(tasks)
+		tasks = sorted(tasks, key=itemgetter('w_start', 'w_end'))
 		timer = time()
 		self.branch([],tasks,satellites)
 		self.solutions = sorted(self.solutions, key=itemgetter('quality'))

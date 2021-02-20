@@ -1,6 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from random import randrange
+from json import dumps
+from json import loads
+from json import load
 
 class Generator:
 	def __init__(self, config, utils):
@@ -9,8 +12,10 @@ class Generator:
 
 	def gen(self):
 		serialized_instance = self.random_serialized_instance()
-		facts = self.deserialize_instance(serialized_instance)
-		self.write_facts(facts)
+		model = self.to_dictionary_model(serialized_instance)
+		self.write_dictionary(model)
+		# facts = self.deserialize_instance(serialized_instance)
+		# self.write_facts(facts)
 
 	def random_serialized_instance(self):
 		probab = self.config.getParam("generating").get("actions_probability")
@@ -43,10 +48,10 @@ class Generator:
 
 		# randomized
 		# draw n orbits (0 - random 3-4)
-		n = 3
+		n = 2
 		# density of actions
 		density = 0.2
-		action_cnt = 25
+		action_cnt = 10
 		orbits = self.utils.rand_orbits(n)
 		# draw orbits action executing parameters
 		for orbit in orbits:
@@ -120,3 +125,85 @@ class Generator:
 			f.write('% Instancja wygenerowana automatycznie\n')
 			for fact in facts:
 				f.write(fact + '\n')
+	
+	def to_dictionary_model(self,facts):
+		sats = facts.get('satellite')
+		sat_memory = facts.get('sat_memory')
+		memory_storage = facts.get('memory_storage')
+		memory_use = facts.get('memory_use')
+		sat_energy = facts.get('sat_energy')
+		energy_storage = facts.get('energy_storage')
+		energy_use = facts.get('energy_use')
+		action = facts.get('action')
+		priority = facts.get('priority')
+		sat_action_time = facts.get('sat_action_time')
+		action_window = facts.get('action_window')
+		energy_gen = facts.get('energy_gen')
+		visible = facts.get('visible')
+		emergency_task = facts.get('emergency_task')
+		action_type = facts.get('action_type')
+		orbits = []
+
+		for x in range(0,len(sats)):
+			orbit = {}
+			orbit['orbit'] = x
+			orbit['sat_name'] = sats[x][1]
+			orbit['memory_use'] = int(memory_use[x][1])
+			orbit['energy_use'] = int(energy_use[x][1])
+			orbit['energy_gen'] = int(energy_gen[x][1])
+			orbit['memory_storage'] = int(memory_storage[x][1])
+			orbit['energy_storage'] = int(energy_storage[x][1])
+			orbit['observe_time'] = int(energy_storage[x][1])
+			sliced = []
+			actions_time = sat_action_time[3*x:3*(x+1)]
+			for sat,action_type,time in actions_time:
+				orbit[action_type+'_time'] = int(time)
+			orbits.append(orbit)
+
+		actions = []
+		for t_id,t_type in action:
+			task = {}
+			t_id = int(t_id)
+			task['task_type'] = t_type
+			task['task_id'] = t_id
+			task['emergency'] = False
+			task['cardinality_min'] = 1
+			task['cardinality_max'] = 9999
+			task['w_start'] = int(action_window[t_id-1][1])
+			task['w_end'] = int(action_window[t_id-1][2])
+			task['assigned_to'] = []
+			task['visible_at'] = []
+
+			# parse priority
+			task['priority'] = 1
+			if t_type == 'observe':
+				task['cardinality_max'] = 1
+				for p_id,prio in priority:
+					if int(p_id) == t_id:
+						task['priority'] = int(prio)
+						break
+			# parse visibility
+			visible_at = []
+			decision_vars = len(sats)
+			task_visibility = visible[decision_vars*(t_id-1):decision_vars*(t_id)]
+			for x in range(0,len(sats)):
+				if task_visibility[x][2] == '1':
+					task['visible_at'].append(int(task_visibility[x][1]))
+			actions.append(task)
+
+		# parse emergency
+		for t_id, in emergency_task:
+			actions[int(t_id)-1]['emergency'] = True
+
+		return {'orbits': orbits, 'tasks': actions}
+
+	def write_dictionary(self,model):
+		fname = self.config.getPath("compare_instances_json")
+		print("zapisywanie w pliku " + fname)
+		problem = dumps(model)
+		with open(fname, "r+") as f:
+			contents = loads(f.read())
+			contents.get('problems').append(problem)
+			print(contents)
+			f.write('a')
+

@@ -11,6 +11,13 @@ class Runner():
 		self.config = config
 		self.generator = generator
 		self.parser = parser
+		# checking obligatory files and dirs
+		if not os.path.isdir(self.config.getPath("problem_instances_dir")):
+			os.mkdir(self.config.getPath("problem_instances_dir"), mode=0o777)
+		compare_json = self.config.getPath("compare_instances_json")
+		if not os.path.isfile(compare_json):
+			with open(compare_json, 'w') as f:
+				f.write('{"problems":[]}')
 
 	def schedule(self, instance_path, **kwargs):
 		# little bit more user-friendly (gets only file name, not full path)
@@ -35,11 +42,7 @@ class Runner():
 		os.system("rm " + tmp_file)
 
 	def generate(self, instances, **kwargs):
-		# make instances directory if not exists
 		instances_dir = self.config.getPath("problem_instances_dir")
-		if os.path.isdir(instances_dir) == False:
-			os.mkdir(instances_dir, mode=0o777)
-
 		for i in range(0,instances):
 			self.generator.gen()
 
