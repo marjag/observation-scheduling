@@ -26,5 +26,6 @@ for problem in problems:
 	tasks = problem.get('tasks')
 	orbits = problem.get('orbits')
 	solutions = bnb.run(tasks=tasks,satellites=orbits,max_solutions=1)
+	print("\n\nharmonogramowanie dla branch & bound...")
 	bnb.print_solutions(solutions)
-	print("\nfinished in " + str(bnb.timer) + " s.")
+	print("\nwykonano w " + str(bnb.timer) + " s.")

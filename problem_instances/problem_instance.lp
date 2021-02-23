@@ -1,17 +1,18 @@
 % Problem Instance
+
 action_type(observe). action_type(downlink). action_type(uplink).
 
 % available actions order
+action(7,observe).
+action(8,observe).
+%*
 action(1,observe).
 action(2,downlink).
 action(3,observe).
 action(4,observe).
 action(5,uplink).
 action(6,downlink).
-action(7,observe).
-action(8,observe).
 action(9,uplink).
-%*
 *%
 
 % visibility of task i on orbit j (decision variable)
@@ -57,7 +58,7 @@ action_window(9,35,38).
 *%
 
 % orbit
-orbit(1).
+%orbit(1).
 
 % satellites
 satellite(1,landsat).
@@ -101,27 +102,3 @@ energy_storage(2,300).
 energy_use(2,10).
 energy_gen(2,2).
 
-%*
-orbit(3).
-satellite(orbit(3),sent).
-sat_action_time(satellite(3), observe, 2).
-sat_action_time(satellite(3), downlink, 2).
-sat_action_time(satellite(3), uplink, 2).
-sat_memory(3,0,0).
-memory_storage(satellite(3),60).
-memory_use(satellite(3),20).
-sat_energy(3,0,300).
-energy_storage(satellite(3),300).
-energy_use(satellite(3),10).
-energy_gen(satellite(3),2).
-
-visible(1,3,1).
-visible(2,3,1).
-visible(3,3,1).
-visible(4,3,1).
-visible(5,3,1).
-visible(6,3,1).
-visible(7,3,1).
-visible(8,3,1).
-visible(9,3,1).
-*%

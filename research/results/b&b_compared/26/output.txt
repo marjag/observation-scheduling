@@ -1,0 +1,11 @@
+UNSATISFIABLE
+
+Models       : 0     
+Calls        : 1
+Time         : 0.061s (Solving: 0.00s 1st Model: 0.00s Unsat: 0.00s)
+CPU Time     : 0.050s
+
+harmonogramowanie dla branch & bound...
+no tasks executed
+
+wykonano w 3.169005870819092 s.

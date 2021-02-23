@@ -1,0 +1,65 @@
+harmonogramowanie...
+instancja /home/marcin/Pulpit/magisterka/observation-scheduling/problem_instances/instance_0.lp
+Answer: 6
+action_scheduled(1,2,3,12)
+action_scheduled(11,1,303,314)
+action_scheduled(12,1,255,266)
+action_scheduled(15,1,389,400)
+action_scheduled(16,1,419,423)
+action_scheduled(17,1,401,412)
+action_scheduled(18,2,437,442)
+action_scheduled(19,1,541,552)
+action_scheduled(20,2,581,590)
+action_scheduled(3,1,55,66)
+action_scheduled(4,1,82,93)
+action_scheduled(5,1,104,115)
+action_scheduled(6,2,147,154)
+action_scheduled(8,1,195,206)
+action_scheduled(9,2,203,212)
+downlinked(sat_1,0)
+downlinked(sat_2,1)
+executed(sat_1,10)
+executed(sat_2,5)
+observed(sat_1,9)
+observed(sat_2,3)
+quality(316)
+sat_energy(1,0,400)
+sat_energy(2,0,700)
+sat_energy(2,1,672)
+sat_memory(1,0,0)
+sat_memory(1,11,50)
+sat_memory(1,12,60)
+sat_memory(1,15,70)
+sat_memory(1,17,80)
+sat_memory(1,19,90)
+sat_memory(1,3,10)
+sat_memory(1,4,20)
+sat_memory(1,5,30)
+sat_memory(1,8,40)
+sat_memory(2,0,0)
+sat_memory(2,1,40)
+sat_memory(2,18,0)
+sat_memory(2,20,40)
+sat_memory(2,9,80)
+
+OPTIMUM FOUND
+
+Models       : 6     
+  Optimum    : yes
+Optimization : 84609
+Calls        : 1
+Time         : 0.077s (Solving: 0.01s 1st Model: 0.00s Unsat: 0.00s)
+CPU Time     : 0.070s
+
+4 ORBITS:
+Answer: 7
+sat_memory(3,0,0) sat_energy(3,0,300) sat_memory(4,0,0) sat_energy(4,0,600) sat_memory(1,0,0) sat_memory(2,0,0) sat_energy(1,0,400) sat_energy(2,0,700) sat_memory(3,18,0) sat_memory(2,1,40) sat_memory(3,2,50) sat_memory(1,3,10) sat_memory(1,4,20) sat_memory(1,5,30) sat_memory(3,7,100) sat_memory(1,8,40) sat_memory(2,9,80) sat_memory(3,10,150) sat_memory(1,11,50) sat_memory(1,12,60) sat_memory(3,14,200) sat_memory(1,15,70) sat_memory(1,17,80) sat_memory(1,19,90) sat_memory(3,20,50) executed(sat_3,8) executed(sat_4,0) executed(sat_1,10) executed(sat_2,3) observed(sat_3,5) observed(sat_4,0) observed(sat_1,9) observed(sat_2,2) downlinked(sat_3,1) downlinked(sat_4,0) downlinked(sat_1,0) downlinked(sat_2,0) action_scheduled(7,3,188,197) action_scheduled(9,2,203,212) quality(456) action_scheduled(1,2,3,12) action_scheduled(3,1,55,66) action_scheduled(5,1,104,115) action_scheduled(11,1,303,314) action_scheduled(15,1,389,400) action_scheduled(17,1,401,412) action_scheduled(19,1,541,552) action_scheduled(2,3,36,45) action_scheduled(4,1,82,93) action_scheduled(8,1,195,206) action_scheduled(10,3,226,235) action_scheduled(12,1,255,266) action_scheduled(14,3,367,376) action_scheduled(20,3,579,588) action_scheduled(18,3,436,442) action_scheduled(6,3,146,153) action_scheduled(6,2,146,153) action_scheduled(16,3,420,427) action_scheduled(16,1,419,423) sat_energy(2,1,672)
+Optimization: 103587
+OPTIMUM FOUND
+
+Models       : 7     
+  Optimum    : yes
+Optimization : 103587
+Calls        : 1
+Time         : 9.119s (Solving: 9.02s 1st Model: 0.00s Unsat: 8.91s)
+CPU Time     : 9.080s

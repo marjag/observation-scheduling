@@ -1,0 +1,98 @@
+harmonogramowanie...
+instancja /home/marcin/Pulpit/magisterka/observation-scheduling/problem_instances/instance_0.lp
+Answer: 9
+action_scheduled(1,1,7,18)
+action_scheduled(10,2,257,264)
+action_scheduled(11,1,309,314)
+action_scheduled(12,2,344,351)
+action_scheduled(14,1,294,298)
+action_scheduled(14,2,294,301)
+action_scheduled(16,2,416,423)
+action_scheduled(18,2,513,520)
+action_scheduled(19,2,454,465)
+action_scheduled(2,1,32,43)
+action_scheduled(20,1,483,494)
+action_scheduled(3,1,52,63)
+action_scheduled(6,2,119,130)
+action_scheduled(7,2,171,182)
+action_scheduled(9,1,246,257)
+downlinked(sat_1,1)
+downlinked(sat_2,0)
+executed(sat_1,7)
+executed(sat_2,8)
+observed(sat_1,5)
+observed(sat_2,3)
+quality(182)
+sat_energy(1,0,300)
+sat_energy(1,1,234)
+sat_energy(1,2,204)
+sat_energy(1,3,164)
+sat_energy(2,0,700)
+sat_energy(2,14,594)
+sat_energy(2,16,636)
+sat_energy(2,18,653)
+sat_energy(2,19,514)
+sat_memory(1,0,0)
+sat_memory(1,1,90)
+sat_memory(1,11,0)
+sat_memory(1,2,180)
+sat_memory(1,20,90)
+sat_memory(1,3,270)
+sat_memory(1,9,360)
+sat_memory(2,0,0)
+sat_memory(2,19,150)
+sat_memory(2,6,50)
+sat_memory(2,7,100)
+
+OPTIMUM FOUND
+
+Models       : 9     
+  Optimum    : yes
+Optimization : 47151
+Calls        : 1
+Time         : 0.133s (Solving: 0.07s 1st Model: 0.00s Unsat: 0.04s)
+CPU Time     : 0.130s
+
+harmonogramowanie dla branch & bound...
+answer 1:
+scheduled actions:
+1 at:
+orbit 1 during 7-18
+2 at:
+orbit 1 during 31-42
+3 at:
+orbit 2 during 51-62
+4 at:
+6 at:
+orbit 1 during 119-130
+5 at:
+orbit 2 during 122-128
+7 at:
+orbit 2 during 171-182
+8 at:
+9 at:
+orbit 1 during 246-257
+10 at:
+orbit 2 during 254-261
+14 at:
+orbit 1 during 294-298
+orbit 2 during 294-301
+11 at:
+orbit 1 during 308-313
+12 at:
+orbit 2 during 339-346
+15 at:
+13 at:
+16 at:
+orbit 2 during 413-420
+17 at:
+19 at:
+orbit 2 during 454-465
+20 at:
+orbit 1 during 483-494
+18 at:
+orbit 2 during 513-520
+quality: 182
+
+
+wykonano w 7.2506232261657715 s.

@@ -1,0 +1,151 @@
+harmonogramowanie...
+instancja /home/marcin/Pulpit/magisterka/observation-scheduling/problem_instances/instance_0.lp
+Answer: 31
+action_scheduled(1,1,10,17)
+action_scheduled(1,2,15,20)
+action_scheduled(10,2,460,469)
+action_scheduled(11,1,510,518)
+action_scheduled(12,1,669,676)
+action_scheduled(12,2,667,672)
+action_scheduled(13,2,662,671)
+action_scheduled(14,1,591,596)
+action_scheduled(14,2,591,598)
+action_scheduled(16,2,905,914)
+action_scheduled(17,2,970,979)
+action_scheduled(18,1,856,864)
+action_scheduled(19,1,1087,1095)
+action_scheduled(2,2,60,69)
+action_scheduled(20,2,1046,1055)
+action_scheduled(3,2,107,114)
+action_scheduled(5,2,228,237)
+action_scheduled(6,2,229,238)
+action_scheduled(7,2,334,343)
+action_scheduled(8,1,427,435)
+action_scheduled(9,1,487,495)
+action_window(1,9,21)
+action_window(10,459,469)
+action_window(11,508,518)
+action_window(12,667,676)
+action_window(13,661,671)
+action_window(14,589,600)
+action_window(15,635,647)
+action_window(16,903,914)
+action_window(17,969,980)
+action_window(18,855,864)
+action_window(19,1087,1099)
+action_window(2,59,69)
+action_window(20,1046,1056)
+action_window(3,105,115)
+action_window(4,151,162)
+action_window(5,228,237)
+action_window(6,227,239)
+action_window(7,333,345)
+action_window(8,424,435)
+action_window(9,486,495)
+downlinked(sat_1,1)
+downlinked(sat_2,2)
+execute(1,1)
+execute(1,2)
+execute(10,2)
+execute(11,1)
+execute(12,1)
+execute(12,2)
+execute(13,2)
+execute(14,1)
+execute(14,2)
+execute(16,2)
+execute(17,2)
+execute(18,1)
+execute(19,1)
+execute(2,2)
+execute(20,2)
+execute(3,2)
+execute(5,2)
+execute(6,2)
+execute(7,2)
+execute(8,1)
+execute(9,1)
+executed(sat_1,8)
+executed(sat_2,13)
+observed(sat_1,5)
+observed(sat_2,9)
+quality(282)
+sat_energy(1,0,500)
+sat_energy(2,0,200)
+sat_memory(1,0,0)
+sat_memory(1,11,90)
+sat_memory(1,14,0)
+sat_memory(1,18,30)
+sat_memory(1,19,60)
+sat_memory(1,8,30)
+sat_memory(1,9,60)
+sat_memory(2,0,0)
+sat_memory(2,10,80)
+sat_memory(2,13,100)
+sat_memory(2,14,0)
+sat_memory(2,16,20)
+sat_memory(2,17,40)
+sat_memory(2,2,20)
+sat_memory(2,20,60)
+sat_memory(2,3,0)
+sat_memory(2,5,20)
+sat_memory(2,6,40)
+sat_memory(2,7,60)
+
+Models       : 31    
+  Optimum    : yes
+Optimization : 38493
+Calls        : 1
+Time         : 4.989s (Solving: 4.93s 1st Model: 0.00s Unsat: 3.79s)
+CPU Time     : 4.940s
+
+
+harmonogramowanie dla branch & bound...
+answer 1:
+scheduled actions:
+1 at:
+orbit 1 during 9-16
+orbit 2 during 9-14
+2 at:
+orbit 2 during 59-68
+3 at:
+orbit 1 during 105-110
+orbit 2 during 105-112
+4 at:
+6 at:
+orbit 2 during 227-236
+5 at:
+orbit 1 during 228-236
+7 at:
+orbit 2 during 333-342
+8 at:
+10 at:
+orbit 2 during 459-468
+9 at:
+orbit 1 during 486-494
+11 at:
+orbit 1 during 508-516
+14 at:
+orbit 1 during 589-594
+orbit 2 during 589-596
+15 at:
+orbit 1 during 635-640
+13 at:
+orbit 2 during 661-670
+12 at:
+orbit 1 during 667-674
+orbit 2 during 671-676
+18 at:
+orbit 2 during 855-864
+16 at:
+orbit 2 during 903-912
+17 at:
+orbit 2 during 969-978
+20 at:
+orbit 2 during 1046-1055
+19 at:
+orbit 1 during 1087-1095
+quality: 276
+
+
+finished in 160.02966022491455 s.

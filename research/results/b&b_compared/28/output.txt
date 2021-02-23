@@ -1,0 +1,106 @@
+harmonogramowanie...
+instancja /home/marcin/Pulpit/magisterka/observation-scheduling/problem_instances/instance_0.lp
+Answer: 13
+action_scheduled(1,2,2,12)
+action_scheduled(10,1,250,257)
+action_scheduled(10,2,251,258)
+action_scheduled(11,1,258,267)
+action_scheduled(12,1,331,340)
+action_scheduled(13,2,305,315)
+action_scheduled(14,1,398,407)
+action_scheduled(15,1,428,437)
+action_scheduled(17,2,484,494)
+action_scheduled(19,1,453,462)
+action_scheduled(2,1,32,41)
+action_scheduled(20,1,574,583)
+action_scheduled(3,2,60,70)
+action_scheduled(4,1,79,88)
+action_scheduled(5,2,99,109)
+action_scheduled(6,2,157,167)
+action_scheduled(7,2,168,175)
+action_scheduled(8,2,199,209)
+action_scheduled(9,1,206,215)
+downlinked(sat_1,0)
+downlinked(sat_2,0)
+executed(sat_1,10)
+executed(sat_2,9)
+observed(sat_1,9)
+observed(sat_2,7)
+quality(439)
+sat_energy(1,0,500)
+sat_energy(2,0,600)
+sat_energy(2,1,600)
+sat_memory(1,0,0)
+sat_memory(1,11,80)
+sat_memory(1,12,100)
+sat_memory(1,14,120)
+sat_memory(1,15,140)
+sat_memory(1,19,160)
+sat_memory(1,2,20)
+sat_memory(1,20,180)
+sat_memory(1,4,40)
+sat_memory(1,9,60)
+sat_memory(2,0,0)
+sat_memory(2,1,10)
+sat_memory(2,13,60)
+sat_memory(2,17,70)
+sat_memory(2,3,20)
+sat_memory(2,5,30)
+sat_memory(2,6,40)
+sat_memory(2,8,50)
+
+OPTIMUM FOUND
+
+Models       : 13    
+  Optimum    : yes
+Optimization : 89995
+Calls        : 1
+Time         : 1.507s (Solving: 1.42s 1st Model: 0.00s Unsat: 1.40s)
+CPU Time     : 1.490s
+
+harmonogramowanie dla branch & bound...
+answer 1:
+scheduled actions:
+1 at:
+orbit 1 during 2-11
+2 at:
+orbit 1 during 32-41
+3 at:
+orbit 1 during 60-69
+4 at:
+orbit 1 during 79-88
+5 at:
+orbit 1 during 99-108
+6 at:
+orbit 1 during 157-166
+7 at:
+orbit 2 during 166-173
+8 at:
+orbit 2 during 197-207
+9 at:
+orbit 1 during 206-215
+10 at:
+orbit 1 during 249-256
+orbit 2 during 249-256
+11 at:
+orbit 1 during 258-267
+13 at:
+orbit 1 during 305-314
+12 at:
+orbit 1 during 331-340
+14 at:
+orbit 1 during 398-407
+16 at:
+15 at:
+orbit 1 during 425-434
+19 at:
+orbit 1 during 451-460
+18 at:
+17 at:
+orbit 1 during 484-493
+20 at:
+orbit 1 during 574-583
+quality: 439
+
+
+wykonano w 109.32063341140747 s.

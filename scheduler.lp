@@ -12,29 +12,14 @@ execute(Action,O) :- orbit(O), visible(Action,O,1), action(Action,uplink).
 
 % wybrac z mozliwych czas wykonywania zadan dla okna kazdej akcji, dla kazdego satelity
 % czas wykonywania akcji musi miescic sie w dostepnych oknach czasowych
-%*
-1 { action_scheduled(Action,O,Start,End) : action_window(Action,WStart,WEnd),
-time(Start),
-End = Start+Duration-1,
+1 { action_scheduled(Action,O,Start,Start+Duration-1) : time(Start),
 Start >= WStart,
-End <= WEnd
-} 1 :- 
-execute(Action,O),
-orbit(O),
-action(Action,Type),
+Start+Duration-1 <= WEnd,
 sat_action_time(O,Type,Duration),
-action_type(Type),time(Start).
-*%
-
-1 { action_scheduled(Action,O,Start,End) : time(Start),
-action_window(Action,Start,WEnd),
-time(End),
-End = Start+Duration-1,
-End <= WEnd,
-sat_action_time(O,Type,Duration)
-} 1 :- 
-execute(Action,O).
-
+action(Action,Type),
+action_type(Type),
+action_window(Action,WStart,WEnd)
+ } 1 :- execute(Action,O).
 
 %% DEFINE
 % parametry satelity
@@ -75,7 +60,7 @@ downlinked(S,Cnt) :- satellite(O,S), Cnt = #count {A: execute(A,O), action(A,dow
 :- sat_energy(O,Action,Val), action(Action,Type), orbit(O), Val < 1.
 
 % wykluczyc modele, w ktorych nie wykonano istniejacych zadan awaryjnych
-%:- not execute(Action,_), action(Action,observe), emergency_task(Action).
+:- not execute(Action,_), action(Action,observe), emergency_task(Action).
 
 
 
@@ -112,7 +97,7 @@ X = #sum { U,O: executed(O,Cnt), energy_use(O,Use), U=Use*Cnt }.
 #show quality/1.
 #show sat_memory/3.
 #show sat_energy/3.
+%*
 #show action_window/3.
 #show execute/2.
-%*
 *%

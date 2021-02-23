@@ -50,7 +50,7 @@ class Generator:
 		# draw n orbits (0 - random 3-4)
 		n = 2
 		# density of actions
-		density = 0.2
+		density = 0.4
 		action_cnt = 20
 		orbits = self.utils.rand_orbits(n)
 		# draw orbits action executing parameters
@@ -60,7 +60,7 @@ class Generator:
 					sat_action_time = self.utils.rand_sat_observe_time()
 				else:
 					sat_action_time = self.utils.rand_sat_link_time()
-				satellite = 'satellite(' + str(orbit) + ')'
+				satellite = str(orbit)
 				model['sat_action_time'].append([satellite,action[0],str(sat_action_time)])
 
 		# draw actions (tasks) to perform
@@ -70,7 +70,7 @@ class Generator:
 		# draw satellites' technical resources
 		for orbit in orbits:
 			orbit = str(orbit)
-			satellite = 'satellite(' + orbit + ')'
+			satellite = orbit
 			energy_gen = self.utils.rand_digit()
 			memory_use = self.utils.rand_use()
 			energy_use = self.utils.rand_use()
@@ -78,7 +78,7 @@ class Generator:
 			energy_storage = self.utils.rand_storage()
 			initial_energy = energy_storage
 			model['orbit'].append([orbit])
-			model['satellite'].append(['orbit('+orbit+')', "sat_"+orbit])
+			model['satellite'].append([orbit, "sat_"+orbit])
 			model["sat_energy"].append([satellite,"0",str(initial_energy)])
 			model["sat_memory"].append([satellite,"0","0"])
 			model["memory_storage"].append([satellite,str(memory_storage)])
