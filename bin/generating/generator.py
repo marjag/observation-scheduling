@@ -1,21 +1,21 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from random import randrange
-from json import dumps
-from json import loads
-from json import load
+import json
 
 class Generator:
 	def __init__(self, config, utils):
 		self.config = config
 		self.utils = utils
+		self.generated_instances = 0
 
 	def gen(self):
 		serialized_instance = self.random_serialized_instance()
 		model = self.to_dictionary_model(serialized_instance)
 		self.write_dictionary(model)
-		# facts = self.deserialize_instance(serialized_instance)
-		# self.write_facts(facts)
+		facts = self.deserialize_instance(serialized_instance)
+		self.write_facts(facts)
+		self.generated_instances += 1
 
 	def random_serialized_instance(self):
 		probab = self.config.getParam("generating").get("actions_probability")
@@ -51,7 +51,7 @@ class Generator:
 		n = 2
 		# density of actions
 		density = 0.2
-		action_cnt = 10
+		action_cnt = 20
 		orbits = self.utils.rand_orbits(n)
 		# draw orbits action executing parameters
 		for orbit in orbits:
@@ -114,12 +114,12 @@ class Generator:
 		for fact_name in instance.keys():
 			for fact in instance.get(fact_name):
 				facts.append(fact_name + '(' + ','.join(fact) + ').')
-		facts.sort()
+		# facts.sort()
 		return facts
 
 	def write_facts(self,facts):
 		problems_dir = self.config.getPath("problem_instances_dir")
-		fname = problems_dir + self.utils.rand_filename()
+		fname = problems_dir + 'instance_' + str(self.generated_instances) + '.lp'
 		print("zapisywanie w pliku " + fname)
 		with open(fname, "w") as f:
 			f.write('% Instancja wygenerowana automatycznie\n')
@@ -143,10 +143,11 @@ class Generator:
 		emergency_task = facts.get('emergency_task')
 		action_type = facts.get('action_type')
 		orbits = []
+		task_types_symbols = {'observe':'O','uplink':'U','downlink':'D'}
 
 		for x in range(0,len(sats)):
 			orbit = {}
-			orbit['orbit'] = x
+			orbit['orbit'] = x + 1
 			orbit['sat_name'] = sats[x][1]
 			orbit['memory_use'] = int(memory_use[x][1])
 			orbit['energy_use'] = int(energy_use[x][1])
@@ -154,6 +155,10 @@ class Generator:
 			orbit['memory_storage'] = int(memory_storage[x][1])
 			orbit['energy_storage'] = int(energy_storage[x][1])
 			orbit['observe_time'] = int(energy_storage[x][1])
+			orbit['busy'] = []
+			orbit['executed'] = 0
+			orbit['observed'] = 0
+			orbit['can_observe'] = int(int(memory_storage[x][1]) / int(memory_use[x][1]))
 			sliced = []
 			actions_time = sat_action_time[3*x:3*(x+1)]
 			for sat,action_type,time in actions_time:
@@ -164,10 +169,10 @@ class Generator:
 		for t_id,t_type in action:
 			task = {}
 			t_id = int(t_id)
-			task['task_type'] = t_type
+			task['task_type'] = task_types_symbols.get(t_type)
 			task['task_id'] = t_id
 			task['emergency'] = False
-			task['cardinality_min'] = 1
+			task['cardinality_min'] = 0
 			task['cardinality_max'] = 9999
 			task['w_start'] = int(action_window[t_id-1][1])
 			task['w_end'] = int(action_window[t_id-1][2])
@@ -194,16 +199,16 @@ class Generator:
 		# parse emergency
 		for t_id, in emergency_task:
 			actions[int(t_id)-1]['emergency'] = True
+			actions[int(t_id)-1]['cardinality_min'] = 1
 
 		return {'orbits': orbits, 'tasks': actions}
 
 	def write_dictionary(self,model):
 		fname = self.config.getPath("compare_instances_json")
 		print("zapisywanie w pliku " + fname)
-		problem = dumps(model)
 		with open(fname, "r+") as f:
-			contents = loads(f.read())
-			contents.get('problems').append(problem)
-			print(contents)
-			f.write('a')
+			contents = json.loads(f.read())
+			f.seek(0)
+			contents.get('problems').append(model)
+			json.dump(contents, f, indent=4)
 

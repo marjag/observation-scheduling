@@ -39,7 +39,7 @@ class Runner():
 		os.system(clingo + " " + encoding + " " + instance_path + " > " + tmp_file)
 		self.parser.process_file(tmp_file, kwargs.get('answers') or 1)
 		# clean
-		os.system("rm " + tmp_file)
+		os.remove(tmp_file)
 
 	def generate(self, instances, **kwargs):
 		instances_dir = self.config.getPath("problem_instances_dir")
@@ -48,6 +48,9 @@ class Runner():
 
 	def prune(self):
 		instances = self.config.getPath("problem_instances_dir")
+		compare_json = self.config.getPath("compare_instances_json")
+		if os.path.isfile(compare_json):
+			os.remove(compare_json)
 		for file in glob.glob(instances + "instance_*.lp"):
 			print("usuwanie " + file + "...")
-			os.system("rm " + file)
+			os.remove(file)

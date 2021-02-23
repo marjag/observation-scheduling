@@ -4,11 +4,11 @@
 from time import time
 from copy import deepcopy
 from itertools import combinations
-from task import Task
-from satellite import Satellite
-from exception import DeadBranchException
-from exception import InvalidSolutionException
 from operator import itemgetter
+from .task import Task
+from .satellite import Satellite
+from .exception import DeadBranchException
+from .exception import InvalidSolutionException
 '''
 Class BnB
 '''
@@ -23,31 +23,14 @@ class BnB:
 		task_type = 0
 		return 3 * satellite.get('observe_time') + 2 * satellite.get('memory_use') + satellite.get('energy_use') - task.get('priority')
 
-	def quality(self,solution):
-		quality = 0;
-		for done in solution:
-			quality += done.get('priority')
-
 	''' Adds correct solution '''
 	def add_solution(self,scheduled_tasks):
-		solution = {'tasks': [], 'quality': 0}
+		solution = {'tasks': scheduled_tasks, 'quality': 0}
 		for task in scheduled_tasks:
-			solution['tasks'].append(task)
 			solution['quality'] += task.get('priority') if task.get('assigned_to') else 0
 		if solution.get('quality') > self.solution_best.get('quality'):
 			self.solution_best = solution
 		self.solutions.append(solution)
-
-	'''
-	Standard reduction - satellites
-	'''
-	def minCost(self,task,satellites):
-		sat = satellites[0]
-		cost_min = self.cost(task,satellites[0])
-		for x in range(1, len(satellites)):
-			if self.cost(task,satellites[x]) < cost_min:
-				sat = satellites[x]
-		return sat
 
 	'''
 	Runs branch and bound procedure
@@ -81,7 +64,7 @@ class BnB:
 				done = deepcopy(done_)
 				task = deepcopy(task_)
 				try:
-					self.bound(task,assign)
+					self.bound(task,assign,rest)
 					copy = []
 					for Sat in satellites:
 						if Sat in assign:
@@ -98,13 +81,12 @@ class BnB:
 					# dead branch, last node, return what was done
 					if self.is_valid_solution(task,rest):
 						self.add_solution(done)
-						# self.branch(done_,[],[])
 				except InvalidSolutionException as e:
 					pass
 
 
 	''' Bounds a branch '''
-	def bound(self,task,assignment):
+	def bound(self,task,assignment,rest):
 		# execute action at max|min orbits bounds (cardinality)
 		assigned_cnt = len(assignment)
 		cardinality_max = task.get('cardinality_max')
@@ -121,19 +103,16 @@ class BnB:
 				raise DeadBranchException("Dead, not visible at "+name, task, assignment)
 		# if uplink - at all visible orbits
 		if task.get('task_type') == 'U':
-			if len(task.get('visible_at')) != len(assignment):
+			if len(task.get('visible_at')) != assigned_cnt:
 				id_ = str(task.get('task_id'))
 				raise InvalidSolutionException("Uplink "+ id_ + " should use all visible orbits")
 
 	''' Returns true when given state is a valid solution '''
 	def is_valid_solution(self,curr_task,rest):
-		if curr_task.get('emergency') and len(curr_task.get('assigned_to')) < 1:
-			return False
-		if curr_task.get('task_type') == 'U' and len(curr_task.get('visible_at')) != len(curr_task.get('assigned_to')):
-			return False
 		for task in rest:
-			if task.get('task_type') == 'U' and len(task.get('visible_at')) != len(task.get('assigned_to')):
-				return False
+			if task.get('task_type') == 'U':
+				if len(task.get('visible_at')) != len(task.get('assigned_to')):
+					return False
 		return True
 
 	'''
@@ -147,9 +126,13 @@ class BnB:
 	]
 	'''
 	def sat_combinations(self,task,satellites):
+		orbits_cnt = len(satellites)
+		cardinality_max = task.get('cardinality_max')
+		assign_cnt_min = task.get('cardinality_min')
+		assign_cnt_max = orbits_cnt if orbits_cnt < cardinality_max else cardinality_max
 		result = []
-		# generate combinations of 0,1,2... satellites
-		for x in range(0,len(satellites)+1):
+		# generate combinations of 0,1,2... satellites, according to cardinality
+		for x in range(assign_cnt_min,assign_cnt_max+1):
 			c = list(combinations(satellites, x))
 			for x in c:
 				result.append(x)
@@ -210,10 +193,11 @@ class BnB:
 			return Sat.get('downlink_time')
 		elif task.get('task_type') == 'U':
 			return Sat.get('uplink_time')
-		raise Error("Bad task type")
+		raise ValueException("Bad task type")
 
 	''' Sets orbit's satellite busy state '''
 	def set_busy(self,sat,from_,to):
+		#todo zmienic na hashmap optimise
 		sat['busy'] += range(from_, to)
 
 	''' Returns true when given satellite is busy at given state and time '''
@@ -238,18 +222,19 @@ class BnB:
 	def execute_window_start(self,sat,task):
 		execute_duration = self.get_action_time(sat,task)
 		t_window_duration = task.get('w_end') - task.get('w_start')
-		time = task.get('w_start') - 1
+		start = task.get('w_start') - 1
 
-		while time <= task.get('w_end') - execute_duration:
-			time += 1
-			if self.is_busy_at(sat,time) or not self.has_more_energy(sat,time):
+		# can start from window start point to window end minus execute duration
+		while start <= task.get('w_end') - execute_duration:
+			start += 1
+			if self.is_busy_at(sat,start) or not self.has_more_energy(sat,start):
 				continue
 			else:
 				# do not overlap actions, test whether would overlap during:
-				if self.is_busy_during(sat,time,time+execute_duration):
+				if self.is_busy_during(sat,start,start+execute_duration):
 					continue
 
-			return time
+			return start
 		raise DeadBranchException("Dead, no available window for {task} at {orb}".format(task=task.get('task_id'),orb=sat.get('sat_name')), task, [sat])
 
 
@@ -284,14 +269,17 @@ class BnB:
 			print("no tasks executed")
 			return
 		print("scheduled actions:")
+		q = 0
 		for task in tasks:
 			tid = task.get('task_id')
 			assigned_to = task.get('assigned_to')
+			q += task.get('priority') if len(assigned_to) > 0 else 0
 			print(str(tid) + " at:")
 			for assignment in assigned_to:
 				print("orbit {o} during {start}-{end}".format(o=assignment[0],start=assignment[1],end=assignment[2]))
 			
 		print("optimisation: {o}".format(o=quality))
+		print("optimisation: {o}".format(o=q))
 		print()
 
 	def print_solutions(self,solutions):

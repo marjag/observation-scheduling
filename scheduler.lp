@@ -12,12 +12,28 @@ execute(Action,O) :- orbit(O), visible(Action,O,1), action(Action,uplink).
 
 % wybrac z mozliwych czas wykonywania zadan dla okna kazdej akcji, dla kazdego satelity
 % czas wykonywania akcji musi miescic sie w dostepnych oknach czasowych
-1 { action_scheduled(Action,Sat,Start,End) : action_window(Action,WStart,WEnd),
+%*
+1 { action_scheduled(Action,O,Start,End) : action_window(Action,WStart,WEnd),
 time(Start),
 End = Start+Duration-1,
 Start >= WStart,
 End <= WEnd
-} 1 :- execute(Action,O), orbit(O), action(Action,Type), sat_action_time(satellite(O),Type,Duration), action_type(Type), satellite(orbit(O),Sat).
+} 1 :- 
+execute(Action,O),
+orbit(O),
+action(Action,Type),
+sat_action_time(O,Type,Duration),
+action_type(Type),time(Start).
+*%
+
+1 { action_scheduled(Action,O,Start,End) : time(Start),
+action_window(Action,Start,WEnd),
+time(End),
+End = Start+Duration-1,
+End <= WEnd,
+sat_action_time(O,Type,Duration)
+} 1 :- 
+execute(Action,O).
 
 
 %% DEFINE
@@ -28,37 +44,38 @@ sat_memory(O,Action,0) :- execute(Action,O), action(Action,downlink), orbit(O).
 % obserwacje zajmuja pamiec
 sat_memory(O,Action,Use) :- execute(Action,O), action(Action,observe), orbit(O),
 LastDownlink = #max {A: execute(A,O), action(A,downlink), S=O, A < Action },
-Use = #sum {Units,A,D,S: execute(A,O), action(A,observe), memory_use(satellite(O),Units), A <= Action, A > D, S=O, D=LastDownlink }.
+Use = #sum {Units,A,D,S: execute(A,O), action(A,observe), memory_use(O,Units), A <= Action, A > D, S=O, D=LastDownlink }.
 
 % zuzycie energii
-sat_energy(O,Action,Amount) :- execute(Action,O), satellite(orbit(O),Sat),
-sat_energy(O,0,Initial), energy_gen(satellite(orbit(O)),Units), action_scheduled(Action,O,Start,End),
-Cost = #sum { U,A : execute(A,Or), A <= Action, energy_use(satellite(orbit(Or)),U), Or=O },
+sat_energy(O,Action,Amount) :- execute(Action,O), satellite(O,Sat),
+sat_energy(O,0,Initial), energy_gen(O,Units), action_scheduled(Action,O,Start,End),
+Cost = #sum { U,A : execute(A,Or), A <= Action, energy_use(Or,U), Or=O },
 Gen = Units * Start,
 Amount = Initial+Gen-Cost,
 Amount <= Initial.
 % maksymalne naladowanie akumulatora
-sat_energy(O,Action,Max) :- sat_energy(O,Action,Amount), Amount > Max, energy_storage(satellite(O),Max).
+sat_energy(O,Action,Max) :- sat_energy(O,Action,Amount), Amount > Max,
+energy_storage(O,Max).
 
 % statystyki dot. ilosci akcji wykonywanych przez satelity
-executed(S,Cnt) :- satellite(orbit(O),S), Cnt = #count {A: execute(A,O) }.
-observed(S,Cnt) :- satellite(orbit(O),S), Cnt = #count {A: execute(A,O), action(A,observe) }.
-downlinked(S,Cnt) :- satellite(orbit(O),S), Cnt = #count {A: execute(A,O), action(A,downlink) }.
+executed(S,Cnt) :- satellite(O,S), Cnt = #count {A: execute(A,O) }.
+observed(S,Cnt) :- satellite(O,S), Cnt = #count {A: execute(A,O), action(A,observe) }.
+downlinked(S,Cnt) :- satellite(O,S), Cnt = #count {A: execute(A,O), action(A,downlink) }.
 
 
 
 %% TEST
 % akcje nie moga sie na siebie nakladac
-:- time(Time), orbit(O), #count { Action : execute(Action,O), action_scheduled(Action,satellite(O),Start,End), Time>=Start, Time<=End} > 1.
+:- time(Time), orbit(O), satellite(O,Sat), #count { Action : execute(Action,O), action_scheduled(Action,O,Start,End), Time>=Start, Time<=End} > 1.
 
 % wykluczyc modele z przekroczeniem pamieci
-:- sat_memory(O,Action,Val), memory_storage(satellite(O),Max), action(Action,Type), orbit(O), Val > Max.
+:- sat_memory(O,Action,Val), memory_storage(O,Max), action(Action,Type), orbit(O), Val > Max.
 
 % wykluczyc modele z wyczerpaniem energii
 :- sat_energy(O,Action,Val), action(Action,Type), orbit(O), Val < 1.
 
 % wykluczyc modele, w ktorych nie wykonano istniejacych zadan awaryjnych
-:- not execute(Action,_), action(Action,observe), emergency_task(Action).
+%:- not execute(Action,_), action(Action,observe), emergency_task(Action).
 
 
 
@@ -74,7 +91,7 @@ quality(X) :- X = #sum { Priority,Action : priority(Action,Priority), execute(Ac
 % inne mozliwosci optymalizacji...
 %*
 memory_used(X) :- 
-X = #sum { U,O: observed(O,Cnt), memory_use(satellite(O),Use), U=Use*Cnt }.
+X = #sum { U,O: observed(O,Cnt), memory_use(O,Use), U=Use*Cnt }.
 energy_used(X) :- 
 X = #sum { U,O: executed(O,Cnt), energy_use(O,Use), U=Use*Cnt }.
 % minimalizacja sumy zuzycia energii
@@ -95,6 +112,7 @@ X = #sum { U,O: executed(O,Cnt), energy_use(O,Use), U=Use*Cnt }.
 #show quality/1.
 #show sat_memory/3.
 #show sat_energy/3.
-%*
+#show action_window/3.
 #show execute/2.
+%*
 *%
