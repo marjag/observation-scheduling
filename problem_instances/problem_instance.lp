@@ -5,7 +5,6 @@ action_type(observe). action_type(downlink). action_type(uplink).
 % available actions order
 action(7,observe).
 action(8,observe).
-%*
 action(1,observe).
 action(2,downlink).
 action(3,observe).
@@ -13,6 +12,7 @@ action(4,observe).
 action(5,uplink).
 action(6,downlink).
 action(9,uplink).
+%*
 *%
 
 % visibility of task i on orbit j (decision variable)
@@ -101,4 +101,3 @@ sat_energy(2,0,300).
 energy_storage(2,300).
 energy_use(2,10).
 energy_gen(2,2).
-

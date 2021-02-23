@@ -1,4 +1,5 @@
-%% MORE ORBITS
+%% Extension
+%% Adds more orbits
 
 orbit(3).
 satellite(3,sat_3).
