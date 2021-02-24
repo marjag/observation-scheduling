@@ -1,6 +1,6 @@
 %% GENERATE
 % okres harmonogramowania [s]
-time(1..1800). % 30 minut
+time(1..3600). % 60 minut
 
 % przypisac satelite do wykonywanej akcji, dla kazdej akcji
 % obserwacja - moze byc wykonana na jednej z orbit z ktorej widac dany obszar

@@ -42,16 +42,14 @@ class Generator:
 			"emergency_task": []
 		}
 		# constants
-		# 1 hour random instance
-		interval = 1800
 		model["action_type"] = [["observe"], ["uplink"], ["downlink"]]
 
 		# randomized
 		# draw n orbits (0 - random 3-4)
 		n = 2
 		# density of actions
-		density = 0.4
-		action_cnt = 20
+		density = 0.2
+		action_cnt = 50
 		orbits = self.utils.rand_orbits(n)
 		# draw orbits action executing parameters
 		for orbit in orbits:

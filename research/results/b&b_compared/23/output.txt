@@ -1,95 +1,88 @@
 harmonogramowanie...
 instancja /home/marcin/Pulpit/magisterka/observation-scheduling/problem_instances/instance_0.lp
-Answer: 6
-action_scheduled(1,2,3,12)
-action_scheduled(11,1,303,314)
-action_scheduled(12,1,255,266)
-action_scheduled(15,1,389,400)
-action_scheduled(16,1,419,423)
-action_scheduled(17,1,401,412)
-action_scheduled(18,2,437,442)
-action_scheduled(19,1,541,552)
-action_scheduled(20,2,581,590)
-action_scheduled(3,1,55,66)
-action_scheduled(4,1,82,93)
-action_scheduled(5,1,104,115)
-action_scheduled(6,2,147,154)
-action_scheduled(8,1,195,206)
-action_scheduled(9,2,203,212)
+Answer: 20
+action_scheduled(10,1,259,268)
+action_scheduled(13,1,278,287)
+action_scheduled(16,1,379,388)
+action_scheduled(17,1,444,453)
+action_scheduled(19,1,500,509)
+action_scheduled(2,1,33,42)
+action_scheduled(20,1,434,443)
+action_scheduled(4,1,89,98)
+action_scheduled(5,1,106,115)
+action_scheduled(7,2,182,192)
+action_scheduled(8,1,199,208)
+action_scheduled(9,1,185,194)
 downlinked(sat_1,0)
-downlinked(sat_2,1)
-executed(sat_1,10)
-executed(sat_2,5)
-observed(sat_1,9)
-observed(sat_2,3)
-quality(316)
-sat_energy(1,0,400)
-sat_energy(2,0,700)
-sat_energy(2,1,672)
+downlinked(sat_2,0)
+executed(sat_1,11)
+executed(sat_2,1)
+observed(sat_1,11)
+observed(sat_2,1)
+quality(344)
+sat_energy(1,0,700)
+sat_energy(2,0,800)
 sat_memory(1,0,0)
-sat_memory(1,11,50)
-sat_memory(1,12,60)
-sat_memory(1,15,70)
-sat_memory(1,17,80)
-sat_memory(1,19,90)
-sat_memory(1,3,10)
-sat_memory(1,4,20)
-sat_memory(1,5,30)
-sat_memory(1,8,40)
+sat_memory(1,10,360)
+sat_memory(1,13,420)
+sat_memory(1,16,480)
+sat_memory(1,17,540)
+sat_memory(1,19,600)
+sat_memory(1,2,60)
+sat_memory(1,20,660)
+sat_memory(1,4,120)
+sat_memory(1,5,180)
+sat_memory(1,8,240)
+sat_memory(1,9,300)
 sat_memory(2,0,0)
-sat_memory(2,1,40)
-sat_memory(2,18,0)
-sat_memory(2,20,40)
-sat_memory(2,9,80)
+sat_memory(2,7,90)
 
 OPTIMUM FOUND
 
-Models       : 6     
+Models       : 20    
   Optimum    : yes
-Optimization : 84609
+Optimization : 77470
 Calls        : 1
-Time         : 0.077s (Solving: 0.01s 1st Model: 0.00s Unsat: 0.00s)
-CPU Time     : 0.070s
+Time         : 6.481s (Solving: 6.40s 1st Model: 0.00s Unsat: 5.42s)
+CPU Time     : 6.470s
 
 harmonogramowanie dla branch & bound...
 answer 1:
 scheduled actions:
 1 at:
-orbit 2 during 3-12
+orbit 2 during 1-5
 2 at:
+orbit 1 during 33-42
 3 at:
-orbit 1 during 55-66
 4 at:
-orbit 1 during 82-93
+orbit 1 during 89-98
 5 at:
-orbit 1 during 104-115
+orbit 1 during 106-115
 6 at:
-orbit 2 during 145-152
 7 at:
-8 at:
-orbit 1 during 195-206
+orbit 2 during 182-192
 9 at:
-orbit 2 during 203-212
-10 at:
-12 at:
-orbit 1 during 255-266
+orbit 1 during 185-194
+8 at:
+orbit 1 during 198-207
 11 at:
-orbit 1 during 303-314
+10 at:
+orbit 1 during 256-265
 13 at:
+orbit 1 during 278-287
+12 at:
+16 at:
+orbit 1 during 377-386
 14 at:
 15 at:
-orbit 1 during 389-400
-17 at:
-orbit 1 during 401-412
-16 at:
-orbit 1 during 419-423
-18 at:
-orbit 2 during 432-437
-19 at:
-orbit 1 during 541-552
 20 at:
-orbit 2 during 579-588
-quality: 316
+orbit 1 during 434-443
+17 at:
+orbit 1 during 444-453
+18 at:
+19 at:
+orbit 1 during 500-509
+quality: 344
 
 
-wykonano w 0.5080389976501465 s.
+wykonano w 102.79980134963989 s.
