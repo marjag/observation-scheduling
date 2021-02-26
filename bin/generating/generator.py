@@ -46,10 +46,12 @@ class Generator:
 
 		# randomized
 		# draw n orbits (0 - random 3-4)
-		n = 2
+		n = self.config.getParam("generating").get("orbits")
+
 		# density of actions
-		density = 0.2
-		action_cnt = 50
+		density = self.config.getParam("generating").get("density")
+		# draw action_cnt random actions
+		action_cnt = self.config.getParam("generating").get("tasks")
 		orbits = self.utils.rand_orbits(n)
 		# draw orbits action executing parameters
 		for orbit in orbits:
@@ -112,6 +114,7 @@ class Generator:
 		for fact_name in instance.keys():
 			for fact in instance.get(fact_name):
 				facts.append(fact_name + '(' + ','.join(fact) + ').')
+		# can sort an instance using:
 		# facts.sort()
 		return facts
 
@@ -202,7 +205,7 @@ class Generator:
 		return {'orbits': orbits, 'tasks': actions}
 
 	def write_dictionary(self,model):
-		fname = self.config.getPath("compare_instances_json")
+		fname = self.config.getPath("instances_json")
 		print("zapisywanie w pliku " + fname)
 		with open(fname, "r+") as f:
 			contents = json.loads(f.read())

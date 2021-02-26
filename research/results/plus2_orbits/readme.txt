@@ -1,10 +1,10 @@
-ASP compared to simple branch and bound algorithm.
+Tests the increase of output with more orbits
 
 - 10 research cases
-- each case is: 20 tasks
-- measurement: execute time, schedule quality (priority sum) with 2 orbits, execute time increase with 4 orbits
+- each case is 20 tasks
+- measurement: execute time, schedule quality (priority sum) with 2 orbits, execute time and quality increase with 4 orbits
 - research cases the same as in b&b comparation (21-30)
-- expanded each problem instance content using orbit and satellite-related facts:
+- expanded each problem instance content using Extension with_3_4_orbits.lp which comprises orbit and satellite-related facts:
 
 
 

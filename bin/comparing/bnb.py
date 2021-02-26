@@ -94,7 +94,6 @@ class BnB:
 		# cardinality_max = task.get('cardinality_max')
 		# if task.get('task_type') == 'O':
 		# 	if assigned_cnt > cardinality_max:
-		# 		exit("DEAD")
 		# 		raise DeadBranchException("Dead, must be done in max {max} orbits".format(max=cardinality_max), task, assignment)
 		# visibility bounds, non-concurrent actions bounds
 		for sat in assignment:

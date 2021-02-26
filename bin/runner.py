@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import glob
 import os
+import sys
 
 '''
 Class Runner executes manager demanded actions
@@ -14,7 +15,7 @@ class Runner():
 		# checking obligatory files and dirs
 		if not os.path.isdir(self.config.getPath("problem_instances_dir")):
 			os.mkdir(self.config.getPath("problem_instances_dir"), mode=0o777)
-		compare_json = self.config.getPath("compare_instances_json")
+		compare_json = self.config.getPath("instances_json")
 		if not os.path.isfile(compare_json):
 			with open(compare_json, 'w') as f:
 				f.write('{"problems":[]}')
@@ -33,7 +34,7 @@ class Runner():
 		# processing
 		instance_path = instances + instance_path
 		if os.path.isfile(instance_path) == False:
-			exit("Nie ma takiego pliku: " + instance_path)
+			sys.exit("Nie można otworzyć pliku instancji: " + instance_path)
 
 		print("instancja " + instance_path)
 		os.system(clingo + " " + encoding + " " + instance_path + " > " + tmp_file)
@@ -48,7 +49,7 @@ class Runner():
 
 	def prune(self):
 		instances = self.config.getPath("problem_instances_dir")
-		compare_json = self.config.getPath("compare_instances_json")
+		compare_json = self.config.getPath("instances_json")
 		if os.path.isfile(compare_json):
 			os.remove(compare_json)
 		for file in glob.glob(instances + "instance_*.lp"):

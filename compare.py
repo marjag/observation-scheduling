@@ -15,7 +15,7 @@ root_dir = os.path.dirname(os.path.realpath(__file__))
 # working dir is set to root path of the app
 os.chdir(root_dir)
 config = Config(root_dir)
-problems_path = config.getPath('compare_instances_json')
+problems_path = config.getPath('instances_json')
 
 problems = []
 with open(problems_path) as f:
