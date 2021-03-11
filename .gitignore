@@ -2,3 +2,4 @@ problem_instances/instance_*
 .*
 __init__.py
 *.pyc
+bin/clingo*
