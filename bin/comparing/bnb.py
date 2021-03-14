@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from time import time
+# from time import sleep
 from copy import deepcopy
 from itertools import combinations
 from operator import itemgetter
@@ -30,7 +31,7 @@ class BnB:
 			solution['quality'] += task.get('priority') if task.get('assigned_to') else 0
 		if solution.get('quality') > self.solution_best.get('quality'):
 			self.solution_best = solution
-		self.solutions.append(solution)
+		# self.solutions.append(solution)
 
 	'''
 	Runs branch and bound procedure
@@ -42,7 +43,8 @@ class BnB:
 		tasks = sorted(tasks, key=itemgetter('w_start', 'w_end'))
 		timer = time()
 		self.branch([],tasks,satellites)
-		self.solutions = sorted(self.solutions, key=itemgetter('quality'))
+		# self.solutions = sorted(self.solutions, key=itemgetter('quality'))
+		self.solutions = [self.solution_best]
 		self.timer = time() - timer
 		if max_solutions > 0:
 			start_index = len(self.solutions) - max_solutions
@@ -88,11 +90,11 @@ class BnB:
 	''' Bounds a branch '''
 	def bound(self,task,assignment,rest):
 		# execute action at max|min orbits bounds (cardinality)
-		assigned_cnt = len(assignment)
-		cardinality_max = task.get('cardinality_max')
-		if task.get('task_type') == 'O':
-			if assigned_cnt > cardinality_max:
-				raise DeadBranchException("Dead, must be done in max {max} orbits".format(max=cardinality_max), task, assignment)
+		# assigned_cnt = len(assignment)
+		# cardinality_max = task.get('cardinality_max')
+		# if task.get('task_type') == 'O':
+		# 	if assigned_cnt > cardinality_max:
+		# 		raise DeadBranchException("Dead, must be done in max {max} orbits".format(max=cardinality_max), task, assignment)
 		# visibility bounds, non-concurrent actions bounds
 		for sat in assignment:
 			name = sat.get('sat_name')
@@ -102,16 +104,24 @@ class BnB:
 			if not self.is_visible_at(task,sat):
 				raise DeadBranchException("Dead, not visible at "+name, task, assignment)
 		# if uplink - at all visible orbits
-		if task.get('task_type') == 'U':
-			if len(task.get('visible_at')) != assigned_cnt:
-				id_ = str(task.get('task_id'))
-				raise InvalidSolutionException("Uplink "+ id_ + " should use all visible orbits")
+		# if task.get('task_type') == 'U':
+		# 	if len(task.get('visible_at')) != assigned_cnt:
+		# 		id_ = str(task.get('task_id'))
+		# 		raise InvalidSolutionException("Uplink "+ id_ + " should use all visible orbits")
 
 	''' Returns true when given state is a valid solution '''
 	def is_valid_solution(self,curr_task,rest):
 		for task in rest:
 			if task.get('task_type') == 'U':
-				if len(task.get('visible_at')) != len(task.get('assigned_to')):
+				if len(task.get('visible_at')) > 0:
+					return False
+			elif task.get('cardinality_min') > 0:
+				return False
+
+		if len(curr_task.get('assigned_to')) < curr_task.get('cardinality_min'):
+			return False
+		if curr_task.get('task_type') == 'U':
+				if len(curr_task.get('visible_at')) > 0:
 					return False
 		return True
 
@@ -128,8 +138,15 @@ class BnB:
 	def sat_combinations(self,task,satellites):
 		orbits_cnt = len(satellites)
 		cardinality_max = task.get('cardinality_max')
+		assign_cnt_max = orbits_cnt
+		# emergencies
 		assign_cnt_min = task.get('cardinality_min')
-		assign_cnt_max = orbits_cnt if orbits_cnt < cardinality_max else cardinality_max
+		if task.get('task_type') == 'U':
+			assign_cnt_min = len(task.get('visible_at'))
+			assign_cnt_max = len(task.get('visible_at'))
+		elif task.get('task_type') == 'O':
+			assign_cnt_max = 1
+		
 		result = []
 		# generate combinations of 0,1,2... satellites, according to cardinality
 		for x in range(assign_cnt_min,assign_cnt_max+1):
@@ -273,13 +290,12 @@ class BnB:
 		for task in tasks:
 			tid = task.get('task_id')
 			assigned_to = task.get('assigned_to')
-			q += task.get('priority') if len(assigned_to) > 0 else 0
+			q += task.get('priority') if task.get('task_type') == 'O' and len(assigned_to) > 0 else 0
 			print(str(tid) + " at:")
 			for assignment in assigned_to:
 				print("orbit {o} during {start}-{end}".format(o=assignment[0],start=assignment[1],end=assignment[2]))
 			
-		print("optimisation: {o}".format(o=quality))
-		print("optimisation: {o}".format(o=q))
+		print("quality: {o}".format(o=q))
 		print()
 
 	def print_solutions(self,solutions):

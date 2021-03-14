@@ -51,7 +51,7 @@ elif action == "prune":
 	runner.prune()
 
 else:
-	print ('''Harmonogramowanie obserwacji satelitarnych, narzędzia:
+	print ('''Manager harmonogramowania obserwacji satelitarnych:
 
 	python3 manager.py gen [n] - generuje n losowych instancji (domyślnie 1)
 	python3 manager.py schedule <p> [m] - optymalny harmonogram dla instancji (pliku) *p*, *m* najlepszych modeli
@@ -59,5 +59,5 @@ else:
 	python3 manager.py help - pomoc
 
 	<a> - argument wymagany
-	[a] - argument niewymagany
+	[a] - argument nie jest wymagany
 	''')

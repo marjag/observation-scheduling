@@ -1,0 +1,332 @@
+{
+    "orbits": [
+        {
+            "orbit": 1,
+            "sat_name": "sat_1",
+            "memory_use": 20,
+            "energy_use": 40,
+            "energy_gen": 8,
+            "memory_storage": 700,
+            "energy_storage": 100,
+            "observe_time": 10,
+            "busy": [],
+            "executed": 0,
+            "observed": 0,
+            "can_observe": 35,
+            "uplink_time": 6,
+            "downlink_time": 8
+        },
+        {
+            "orbit": 2,
+            "sat_name": "sat_2",
+            "memory_use": 20,
+            "energy_use": 80,
+            "energy_gen": 9,
+            "memory_storage": 200,
+            "energy_storage": 800,
+            "observe_time": 12,
+            "busy": [],
+            "executed": 0,
+            "observed": 0,
+            "can_observe": 10,
+            "uplink_time": 8,
+            "downlink_time": 5
+        }
+    ],
+    "tasks": [
+        {
+            "task_type": "O",
+            "task_id": 1,
+            "emergency": true,
+            "cardinality_min": 1,
+            "cardinality_max": 1,
+            "w_start": 4,
+            "w_end": 14,
+            "assigned_to": [],
+            "visible_at": [
+                1,
+                2
+            ],
+            "priority": 12
+        },
+        {
+            "task_type": "U",
+            "task_id": 2,
+            "emergency": false,
+            "cardinality_min": 0,
+            "cardinality_max": 9999,
+            "w_start": 31,
+            "w_end": 42,
+            "assigned_to": [],
+            "visible_at": [
+                2
+            ],
+            "priority": 1
+        },
+        {
+            "task_type": "U",
+            "task_id": 3,
+            "emergency": false,
+            "cardinality_min": 0,
+            "cardinality_max": 9999,
+            "w_start": 52,
+            "w_end": 62,
+            "assigned_to": [],
+            "visible_at": [
+                1,
+                2
+            ],
+            "priority": 1
+        },
+        {
+            "task_type": "O",
+            "task_id": 4,
+            "emergency": false,
+            "cardinality_min": 0,
+            "cardinality_max": 1,
+            "w_start": 97,
+            "w_end": 106,
+            "assigned_to": [],
+            "visible_at": [
+                1,
+                2
+            ],
+            "priority": 27
+        },
+        {
+            "task_type": "O",
+            "task_id": 5,
+            "emergency": false,
+            "cardinality_min": 0,
+            "cardinality_max": 1,
+            "w_start": 104,
+            "w_end": 116,
+            "assigned_to": [],
+            "visible_at": [
+                1,
+                2
+            ],
+            "priority": 28
+        },
+        {
+            "task_type": "U",
+            "task_id": 6,
+            "emergency": false,
+            "cardinality_min": 0,
+            "cardinality_max": 9999,
+            "w_start": 120,
+            "w_end": 129,
+            "assigned_to": [],
+            "visible_at": [
+                1
+            ],
+            "priority": 1
+        },
+        {
+            "task_type": "O",
+            "task_id": 7,
+            "emergency": false,
+            "cardinality_min": 0,
+            "cardinality_max": 1,
+            "w_start": 159,
+            "w_end": 171,
+            "assigned_to": [],
+            "visible_at": [
+                1
+            ],
+            "priority": 43
+        },
+        {
+            "task_type": "O",
+            "task_id": 8,
+            "emergency": true,
+            "cardinality_min": 1,
+            "cardinality_max": 1,
+            "w_start": 194,
+            "w_end": 203,
+            "assigned_to": [],
+            "visible_at": [
+                1,
+                2
+            ],
+            "priority": 49
+        },
+        {
+            "task_type": "O",
+            "task_id": 9,
+            "emergency": false,
+            "cardinality_min": 0,
+            "cardinality_max": 1,
+            "w_start": 245,
+            "w_end": 255,
+            "assigned_to": [],
+            "visible_at": [
+                1,
+                2
+            ],
+            "priority": 8
+        },
+        {
+            "task_type": "U",
+            "task_id": 10,
+            "emergency": false,
+            "cardinality_min": 0,
+            "cardinality_max": 9999,
+            "w_start": 248,
+            "w_end": 259,
+            "assigned_to": [],
+            "visible_at": [
+                1,
+                2
+            ],
+            "priority": 1
+        },
+        {
+            "task_type": "O",
+            "task_id": 11,
+            "emergency": false,
+            "cardinality_min": 0,
+            "cardinality_max": 1,
+            "w_start": 276,
+            "w_end": 288,
+            "assigned_to": [],
+            "visible_at": [
+                2
+            ],
+            "priority": 36
+        },
+        {
+            "task_type": "D",
+            "task_id": 12,
+            "emergency": false,
+            "cardinality_min": 0,
+            "cardinality_max": 9999,
+            "w_start": 334,
+            "w_end": 346,
+            "assigned_to": [],
+            "visible_at": [
+                2
+            ],
+            "priority": 1
+        },
+        {
+            "task_type": "D",
+            "task_id": 13,
+            "emergency": false,
+            "cardinality_min": 0,
+            "cardinality_max": 9999,
+            "w_start": 338,
+            "w_end": 347,
+            "assigned_to": [],
+            "visible_at": [
+                2
+            ],
+            "priority": 1
+        },
+        {
+            "task_type": "O",
+            "task_id": 14,
+            "emergency": false,
+            "cardinality_min": 0,
+            "cardinality_max": 1,
+            "w_start": 392,
+            "w_end": 403,
+            "assigned_to": [],
+            "visible_at": [
+                1,
+                2
+            ],
+            "priority": 17
+        },
+        {
+            "task_type": "U",
+            "task_id": 15,
+            "emergency": false,
+            "cardinality_min": 0,
+            "cardinality_max": 9999,
+            "w_start": 352,
+            "w_end": 362,
+            "assigned_to": [],
+            "visible_at": [
+                1,
+                2
+            ],
+            "priority": 1
+        },
+        {
+            "task_type": "O",
+            "task_id": 16,
+            "emergency": false,
+            "cardinality_min": 0,
+            "cardinality_max": 1,
+            "w_start": 345,
+            "w_end": 355,
+            "assigned_to": [],
+            "visible_at": [
+                1,
+                2
+            ],
+            "priority": 30
+        },
+        {
+            "task_type": "O",
+            "task_id": 17,
+            "emergency": false,
+            "cardinality_min": 0,
+            "cardinality_max": 1,
+            "w_start": 445,
+            "w_end": 457,
+            "assigned_to": [],
+            "visible_at": [
+                1,
+                2
+            ],
+            "priority": 17
+        },
+        {
+            "task_type": "O",
+            "task_id": 18,
+            "emergency": false,
+            "cardinality_min": 0,
+            "cardinality_max": 1,
+            "w_start": 476,
+            "w_end": 487,
+            "assigned_to": [],
+            "visible_at": [
+                1,
+                2
+            ],
+            "priority": 47
+        },
+        {
+            "task_type": "O",
+            "task_id": 19,
+            "emergency": false,
+            "cardinality_min": 0,
+            "cardinality_max": 1,
+            "w_start": 411,
+            "w_end": 420,
+            "assigned_to": [],
+            "visible_at": [
+                1,
+                2
+            ],
+            "priority": 33
+        },
+        {
+            "task_type": "O",
+            "task_id": 20,
+            "emergency": false,
+            "cardinality_min": 0,
+            "cardinality_max": 1,
+            "w_start": 574,
+            "w_end": 585,
+            "assigned_to": [],
+            "visible_at": [
+                1,
+                2
+            ],
+            "priority": 5
+        }
+    ]
+}

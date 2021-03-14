@@ -1,0 +1,15 @@
+harmonogramowanie...
+instancja /home/marcin/Pulpit/magisterka/observation-scheduling/problem_instances/instance_0.lp
+UNSATISFIABLE
+
+Models       : 0     
+Calls        : 1
+Time         : 0.044s (Solving: 0.00s 1st Model: 0.00s Unsat: 0.00s)
+CPU Time     : 0.040s
+
+
+harmonogramowanie dla branch & bound...
+answer 1:
+no tasks executed
+
+wykonano w 2.8825020790100098 s.

@@ -3,18 +3,21 @@
 		"clingo_exec": "/bin/clingo-4.5.4-linux-x86_64/clingo",
 		"problem_encoding": "/scheduler.lp",
 		"problem_instances_dir": "/problem_instances/",
-		"compare_instances_json": "/bin/comparing/problems.json",
+		"instances_json": "/problem_instances/problems.json",
 		"report_file": "/report.lp",
 		"tmp_file": "/tmp.mng"
 	},
 	"generating": {
+		"orbits": 3,
+		"tasks": 50,
+		"density": 0.2,
+		"to_json_file": false,
 		"actions_probability": {
 			"observe": 0.80,
-			"downlink": 0.10,
-			"uplink": 0.10,
-			"emergency": 0.25,
+			"downlink": 0.15,
+			"uplink": 0.05,
+			"emergency": 0.4,
 			"visibility": 0.80
 		}
-
 	}
 }
