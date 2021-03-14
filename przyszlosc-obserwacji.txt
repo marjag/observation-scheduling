@@ -1,0 +1,18 @@
+Technologia satelitarna rozwija się bardzo dynamicznie. Wraz z tym rozwojem dostrzegalna jest potrzeba do konstruowania coraz lżejszych i mniejszych satelitów. Wg [30] przyjmuje się, że satelita jest mały jeśli jego masa jest mniejsza niż 200 kg. W ciągu ostatnich 2 dekad pojawiła i spopularyzowała się jeszcze jedna grupa tych urządzeń zwanych CubeSats (satelita sześcian). Nazwa ta wywodzi sięz kształtu prototypu tego urządzenia - sześcian o wymiarach 10 cm x 10 cm x 10 cm (1U). Masa tych urządzeń nie przekracza 12 kg, są to więc nanosatelity. Konstruuje się te urządzenia w rozmiarach podawanych w jednostach (unit U) np. 0,5U, 1U, 3U itd. Miniaturyzacja połączona z coraz bardziej wyspecjalizowanym oprzyrządowaniem (sensorami) będzie w przyszłych latach jeszcze bardziej popularna ze względu na to, że:
+- częstotliwość orbitowania - większa ilość satelitów pozwala na obserwacje w krótszych interwałach czasu pozwalając na dokładniejszy monitoring zjawisk i obszarów
+- produkcja małych i nano satelitów na coraz większą skalę w efekcie zmniejszy koszty budowy dużych ilości urządzeń
+- koszt wystrzału rośnie proporcjonalnie do masy urządzenia, stąd umieszczanie na orbicie małych i lekkich satelit jest bardzo korzystne
+- małe satelity mogą stanowić pewnego rodzaju prototyp dla niektórych misji służący wstępnemu zbadaniu opłacalności przed dalszym rozwojem danej misji
+- możliwa jest współpraca małych satelitów z dużymi, w której te mniejsze stanowią pewnego rodzaju wspomaganie
+Przy użyciu tych urządzeń możliwa jest także bardziej intensywna eksploracja przestrzeni kosicznej (np. układu Słonecznego)
+
+Jednym z problemów pojawiającym się na horyzoncie przyszłych lat są tzw. kosmiczne śmieci. Są to min. nieużywate lub zepsute satelity, wciąż orbitujące Ziemię. Zwykle są one sprowadzane na orbitę przeznaczoną dla tych zużytych urządzeń (tzw. cmentarzysko). Odpady te znajdują się na wysokości 160 km - 36000 km. Coraz większe zatłoczenie panujące w przestrzeni okołoziemskiej powoduje, że konieczne jest uwzględnianie tych obiektów w planowaniu misji satelitarnych. Niewielkie odłamki tych odpadów osiągają bardzo wysokie prędkości, mimo niewielkiej masy energia kinetyczna takich obiektów jest bardzo wysoka. Powstaje więc zagrożenie zniszczenia lub uszkodzenia operującego satelity przy powstaniu kolizji [31].
+W celu minimalizowania tych zagrożeń konieczne jest śledzenie odpadów przy pomocy radarów, stacjonarnych obserwatoriów itd. Pojawiają się również koncepcje neutralizowania tych odpadów, np. [31]:
+- wysyłanie rakiet mających na celu uwolnienie skupisk wodnych neutralizujących odpady i wybijające je z orbity
+- sprowadzanie odpadów na powierzchnię Ziemi, w  przeznaczone do tego miejsca
+- recykling odpadów w  celu wykorzystania go wprost na orbicie przez specjalne satelity
+- OSCAR CubeSat - dedykowany ku wyłapowaniu i deorbitacji odpadów
+Ilość kosmicznych odpadów zwiększa się bardzo szybko, przyszła aktywność kosmiczna będzie coraz bardziej limitowana lub zależna od neutralizowania odpadów [31].
+
+[30] Millan, R. & Von Steiger, Rudolf & Ariel, Meir & Bartalev, Sergey & Borgeaud, Maurice & Campagnola, Stefano & Castillo-Rogez, J. & Fléron, René & Gass, Volker & Gregorio, Anna & Klumpar, D. & Lal, Bhavya & Macdonald, Malcolm & Park, Jong & Rao, V. & Schilling, Klaus & Stephens, Graeme & Title, Alan & Wu, Ji. (2019). Small Satellites for Space Science. Advances in Space Research. 64. 10.1016/j.asr.2019.07.035. 
+[31] Kumari, Amisha. (2019). Space Debris : An environmental problem for space missions. 
